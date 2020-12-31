@@ -2,7 +2,7 @@
   "name": "hoaxify-api",
   "version": "1.0.0",
   "description": "Express API for Hoaxify Social Media Web Application",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
