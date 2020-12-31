@@ -4,9 +4,9 @@
   "description": "Express API for Hoaxify Social Media Web Application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "cross-env NODE_ENV=development nodemon index.js",
     "dev": "nodemon index.js",
-    "test": "jest --watch",
+    "test": "cross-env NODE_ENV=test jest --watch",
     "lint": "eslint ."
   },
   "author": "Kenneth Bushman",
