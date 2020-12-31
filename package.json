@@ -25,7 +25,11 @@
       "ecmaVersion": 6
     },
     "extends": [
-      "eslint:recommended"
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "prettier"
     ],
     "env": {
       "node": true,
