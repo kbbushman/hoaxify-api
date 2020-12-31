@@ -3,7 +3,7 @@ const User = require('./User');
 
 const create = async (req, res) => {
   if (req.body.username === null) {
-    return res.sendStatus(400);
+    return res.status(400).json({ validationErrors: {} });
   }
   const hash = await bcrypt.hash(req.body.password, 10);
   const user = { ...req.body, password: hash };
