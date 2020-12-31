@@ -17,5 +17,25 @@
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "supertest": "^6.0.1"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "semi": "warn",
+      "quotes": [
+        "warn",
+        "single"
+      ]
+    }
   }
 }
