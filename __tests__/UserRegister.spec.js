@@ -20,47 +20,34 @@ describe('User Registration', () => {
     });
   };
 
-  it('returns 200 on successful signup request', (done) => {
-    createUser().then((response) => {
-      expect(response.status).toBe(200);
-      done();
-    });
+  it('returns 200 on successful signup request', async () => {
+    const response = await createUser();
+    expect(response.status).toBe(200);
   });
 
-  it('returns a success message on successful signup request', (done) => {
-    createUser().then((response) => {
-      expect(response.body.message).toBe('User created successfully');
-      done();
-    });
+  it('returns a success message on successful signup request', async () => {
+    const response = await createUser();
+    expect(response.body.message).toBe('User created successfully');
   });
 
-  it('saves the user to the database', (done) => {
-    createUser().then(() => {
-      User.findAll().then((userList) => {
-        expect(userList.length).toBe(1);
-        done();
-      });
-    });
+  it('saves the user to the database', async () => {
+    await createUser();
+    const userList = await User.findAll();
+    expect(userList.length).toBe(1);
   });
 
-  it('saves the username and email to the database', (done) => {
-    createUser().then(() => {
-      User.findAll().then((userList) => {
-        const savedUser = userList[0];
-        expect(savedUser.username).toBe('test1');
-        expect(savedUser.email).toBe('test@test.com');
-        done();
-      });
-    });
+  it('saves the username and email to the database', async () => {
+    await createUser();
+    const userList = await User.findAll();
+    const savedUser = userList[0];
+    expect(savedUser.username).toBe('test1');
+    expect(savedUser.email).toBe('test@test.com');
   });
 
-  it('saves password hash to the database', (done) => {
-    createUser().then(() => {
-      User.findAll().then((userList) => {
-        const savedUser = userList[0];
-        expect(savedUser.password).not.toBe('1234');
-        done();
-      });
-    });
+  it('saves password hash to the database', async () => {
+    await createUser();
+    const userList = await User.findAll();
+    const savedUser = userList[0];
+    expect(savedUser.password).not.toBe('1234');
   });
 });
