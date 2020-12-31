@@ -5,6 +5,8 @@ const Model = Sequelize.Model;
 
 class User extends Model {}
 
+// init() creates a Model that represents db table
+// Takes attributes object and options object
 User.init(
   {
     username: {
@@ -18,8 +20,8 @@ User.init(
     },
   },
   {
-    sequelize,
-    modelName: 'user',
+    sequelize, // Sequelize instance
+    modelName: 'user', // table name
   }
 );
 
