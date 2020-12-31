@@ -36,12 +36,9 @@
       "es6": true,
       "jest": true
     },
-    "rules": {
-      "semi": "warn",
-      "quotes": [
-        "warn",
-        "single"
-      ]
-    }
+    "rules": {}
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
