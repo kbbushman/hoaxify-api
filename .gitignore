@@ -1,5 +1,7 @@
 .DS_Store
 
+database.sqlite
+
 .env
 .env.dev
 .env.prod
