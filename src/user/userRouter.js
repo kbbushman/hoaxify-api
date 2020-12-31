@@ -12,6 +12,15 @@ const validateUsername = (req, res, next) => {
   next();
 };
 
-router.post('/', validateUsername, userController.create);
+const validateEmail = (req, res, next) => {
+  if (req.body.email === null) {
+    return res
+      .status(400)
+      .json({ validationErrors: { email: 'Email cannot be null' } });
+  }
+  next();
+};
+
+router.post('/', validateUsername, validateEmail, userController.create);
 
 module.exports = router;
