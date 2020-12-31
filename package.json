@@ -37,6 +37,7 @@
       "jest": true
     },
     "rules": {
+      "eqeqeq": "warn",
       "prettier/prettier": "warn"
     }
   },
