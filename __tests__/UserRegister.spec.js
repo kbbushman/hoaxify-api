@@ -11,15 +11,17 @@ beforeEach(() => {
   return User.destroy({ truncate: true });
 });
 
-describe('User Registration', () => {
-  const createUser = () => {
-    return request(app).post('/api/v1/users').send({
-      username: 'test1',
-      email: 'test@test.com',
-      password: '1234',
-    });
-  };
+const validUser = {
+  username: 'test1',
+  email: 'test@test.com',
+  password: '1234',
+};
 
+const createUser = (user = validUser) => {
+  return request(app).post('/api/v1/users').send(user);
+};
+
+describe('User Registration', () => {
   it('returns 200 on successful signup request', async () => {
     const response = await createUser();
     expect(response.status).toBe(200);
@@ -52,7 +54,7 @@ describe('User Registration', () => {
   });
 
   it('returns 400 if username is null', async () => {
-    const response = await request(app).post('/api/v1/users').send({
+    const response = await createUser({
       username: null,
       email: 'test@test.com',
       password: '1234',
