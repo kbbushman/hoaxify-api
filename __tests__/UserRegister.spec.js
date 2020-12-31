@@ -73,4 +73,21 @@ describe('User Registration', () => {
         });
       });
   });
+
+  it('saves password hash to the database', (done) => {
+    request(app)
+      .post('/api/v1/users')
+      .send({
+        username: 'test1',
+        email: 'test@test.com',
+        password: '1234',
+      })
+      .then(() => {
+        User.findAll().then((userList) => {
+          const savedUser = userList[0];
+          expect(savedUser.password).not.toBe('1234');
+          done();
+        });
+      });
+  });
 });
