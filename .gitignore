@@ -1,6 +1,6 @@
 .DS_Store
 
-database.sqlite
+*.sqlite
 
 .env
 .env.dev
