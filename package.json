@@ -41,6 +41,7 @@
     }
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "printWidth": 80
   }
 }
