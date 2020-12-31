@@ -36,7 +36,9 @@
       "es6": true,
       "jest": true
     },
-    "rules": {}
+    "rules": {
+      "prettier/prettier": "warn"
+    }
   },
   "prettier": {
     "singleQuote": true
