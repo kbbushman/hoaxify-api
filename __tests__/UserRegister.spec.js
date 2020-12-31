@@ -61,4 +61,13 @@ describe('User Registration', () => {
     });
     expect(response.status).toBe(400);
   });
+
+  it('returns validationErrors field in response body when validation errors occur', async () => {
+    const response = await createUser({
+      username: null,
+      email: 'test@test.com',
+      password: '1234',
+    });
+    expect(response.body.validationErrors).not.toBeUndefined();
+  });
 });
