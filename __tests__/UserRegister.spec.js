@@ -70,4 +70,15 @@ describe('User Registration', () => {
     });
     expect(response.body.validationErrors).not.toBeUndefined();
   });
+
+  it('returns Username cannot be null when username is null', async () => {
+    const response = await createUser({
+      username: null,
+      email: 'test@test.com',
+      password: '1234',
+    });
+    expect(response.body.validationErrors.username).toBe(
+      'Username cannot be null'
+    );
+  });
 });
