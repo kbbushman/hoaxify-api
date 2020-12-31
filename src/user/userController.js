@@ -3,7 +3,9 @@ const User = require('./User');
 
 const create = async (req, res) => {
   if (req.body.username === null) {
-    return res.status(400).json({ validationErrors: {} });
+    return res
+      .status(400)
+      .json({ validationErrors: { username: 'Username cannot be null' } });
   }
   const hash = await bcrypt.hash(req.body.password, 10);
   const user = { ...req.body, password: hash };
