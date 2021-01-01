@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.9.0",
     "i18next": "^19.8.4",
+    "i18next-fs-backend": "^1.0.7",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.0"
   },
