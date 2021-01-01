@@ -125,10 +125,10 @@ describe('User Registration', () => {
     }
   );
 
-  it('returns "Email already in use" when email is already in use', async () => {
+  it(`returns "${email_invalid}" when email is already in use`, async () => {
     await User.create({ ...validUser });
     const response = await createUser();
-    expect(response.body.validationErrors.email).toBe('Email already in use');
+    expect(response.body.validationErrors.email).toBe(email_inuse);
   });
 
   it('returns errors for both username is null and email already in use', async () => {
@@ -140,5 +140,63 @@ describe('User Registration', () => {
     });
     const body = response.body;
     expect(Object.keys(body.validationErrors)).toEqual(['username', 'email']);
+  });
+});
+
+describe('Internationalization', () => {
+  const createUser = (user = validUser) => {
+    return request(app)
+      .post('/api/v1/users')
+      .set('Accept-Language', 'es')
+      .send(user);
+  };
+
+  const username_null = 'El nombre de usuario no puede ser nulo';
+  const username_length =
+    'Debe tener un mínimo de 4 y un máximo de 32 caracteres';
+  const email_null = 'El correo electrónico no puede ser nulo';
+  const email_invalid = 'El correo no es válido';
+  const password_null = 'La contraseña no puede ser nula';
+  const password_length = 'La contraseña debe tener al menos 6 caracteres';
+  const password_pattern =
+    'La contraseña debe tener al menos 1 letra minúscula, 1 letra mayúscula y 1 número';
+  const email_inuse = 'Correo electrónico ya en uso';
+
+  it.each`
+    field         | value              | expectedMessage
+    ${'username'} | ${null}            | ${username_null}
+    ${'username'} | ${'usr'}           | ${username_length}
+    ${'username'} | ${'a'.repeat(33)}  | ${username_length}
+    ${'email'}    | ${null}            | ${email_null}
+    ${'email'}    | ${'mail.com'}      | ${email_invalid}
+    ${'email'}    | ${'test.mail.com'} | ${email_invalid}
+    ${'email'}    | ${'test@mail'}     | ${email_invalid}
+    ${'password'} | ${null}            | ${password_null}
+    ${'password'} | ${'passw'}         | ${password_length}
+    ${'password'} | ${'alllowercase'}  | ${password_pattern}
+    ${'password'} | ${'ALLUPPERCASE'}  | ${password_pattern}
+    ${'password'} | ${'123456789'}     | ${password_pattern}
+    ${'password'} | ${'lowerandUPPER'} | ${password_pattern}
+    ${'password'} | ${'lowerand1234'}  | ${password_pattern}
+    ${'password'} | ${'UPPERAND1234'}  | ${password_pattern}
+  `(
+    'returns "$expectedMessage" if $field is $value when language is set to Spanish',
+    async ({ field, expectedMessage, value }) => {
+      const user = {
+        username: 'test1',
+        email: 'test@test.com',
+        password: 'P4ssword',
+      };
+      user[field] = value;
+      const response = await createUser(user);
+      const body = response.body;
+      expect(body.validationErrors[field]).toBe(expectedMessage);
+    }
+  );
+
+  it(`returns "${email_inuse}" if email is already in use when language is set to Spanish`, async () => {
+    await User.create({ ...validUser });
+    const response = await createUser();
+    expect(response.body.validationErrors.email).toBe(email_inuse);
   });
 });
