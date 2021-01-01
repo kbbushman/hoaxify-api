@@ -102,4 +102,15 @@ describe('User Registration', () => {
       'email',
     ]);
   });
+
+  it('returns "Password cannot be null" when password is null', async () => {
+    const response = await createUser({
+      username: 'test1',
+      email: 'test@test.com',
+      password: null,
+    });
+    expect(response.body.validationErrors.password).toBe(
+      'Password cannot be null'
+    );
+  });
 });
