@@ -84,12 +84,15 @@ describe('User Registration', () => {
   });
 
   it.each`
-    field         | value             | expectedMessage
-    ${'username'} | ${null}           | ${'Username cannot be null'}
-    ${'username'} | ${'usr'}          | ${'Must have min 4 and max 32 characters'}
-    ${'username'} | ${'a'.repeat(33)} | ${'Must have min 4 and max 32 characters'}
-    ${'email'}    | ${null}           | ${'Email cannot be null'}
-    ${'password'} | ${null}           | ${'Password cannot be null'}
+    field         | value              | expectedMessage
+    ${'username'} | ${null}            | ${'Username cannot be null'}
+    ${'username'} | ${'usr'}           | ${'Must have min 4 and max 32 characters'}
+    ${'username'} | ${'a'.repeat(33)}  | ${'Must have min 4 and max 32 characters'}
+    ${'email'}    | ${null}            | ${'Email cannot be null'}
+    ${'email'}    | ${'mail.com'}      | ${'Email is not valid'}
+    ${'email'}    | ${'test.mail.com'} | ${'Email is not valid'}
+    ${'email'}    | ${'test@com'}      | ${'Email is not valid'}
+    ${'password'} | ${null}            | ${'Password cannot be null'}
   `(
     'returns "$expectedMessage" when $field is $value',
     async ({ field, expectedMessage, value }) => {
