@@ -1,6 +1,5 @@
 const express = require('express');
 const { check, validationResult } = require('express-validator');
-const User = require('./User');
 const userController = require('./userController');
 
 const router = express.Router();
@@ -33,7 +32,7 @@ router.post(
     .withMessage('Email is not valid')
     .bail()
     .custom(async (email) => {
-      const user = await User.findOne({ where: { email } });
+      const user = await userController.findByEmail(email);
       if (user) {
         throw new Error('Email already in use');
       }
