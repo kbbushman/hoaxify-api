@@ -8,6 +8,11 @@ const create = async (req, res) => {
   return res.send({ message: 'User created successfully' });
 };
 
+const findByEmail = async (email) => {
+  return await User.findOne({ where: { email } });
+};
+
 module.exports = {
   create,
+  findByEmail,
 };
