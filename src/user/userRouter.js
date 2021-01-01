@@ -3,24 +3,33 @@ const userController = require('./userController');
 
 const router = express.Router();
 
-const validateUsername = (req, res, next) => {
+const validateUsername = (req) => {
   if (req.body.username === null) {
-    return res
-      .status(400)
-      .json({ validationErrors: { username: 'Username cannot be null' } });
+    req.validationErrors = {
+      username: 'Username cannot be null',
+    };
   }
-  next();
 };
 
-const validateEmail = (req, res, next) => {
+const validateEmail = (req) => {
   if (req.body.email === null) {
-    return res
-      .status(400)
-      .json({ validationErrors: { email: 'Email cannot be null' } });
+    req.validationErrors = {
+      ...req.validationErrors,
+      email: 'Email cannot be null',
+    };
+  }
+};
+
+const validateRequest = (req, res, next) => {
+  validateUsername(req);
+  validateEmail(req);
+  if (req.validationErrors) {
+    const response = { validationErrors: { ...req.validationErrors } };
+    return res.status(400).send(response);
   }
   next();
 };
 
-router.post('/', validateUsername, validateEmail, userController.create);
+router.post('/', validateRequest, userController.create);
 
 module.exports = router;
