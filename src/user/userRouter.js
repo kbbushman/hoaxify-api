@@ -35,7 +35,12 @@ router.post(
     .withMessage('Password cannot be null')
     .bail()
     .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters'),
+    .withMessage('Password must be at least 6 characters')
+    .bail()
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
+    .withMessage(
+      'Password must have at least 1 lowercase letter, 1 uppercase letter, and 1 number'
+    ),
   validateRequest,
   userController.create
 );
