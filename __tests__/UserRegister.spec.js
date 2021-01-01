@@ -201,7 +201,7 @@ describe('Internationalization', () => {
   });
 
   it(`returns a success message of ${user_create_success} on successful signup request when language is set to Spanish`, async () => {
-    const response = await createUser();
+    const response = await createUser({ ...validUser }, { language: 'es' });
     expect(response.body.message).toBe(user_create_success);
   });
 });
