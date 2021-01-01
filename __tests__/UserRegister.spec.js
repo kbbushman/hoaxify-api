@@ -14,7 +14,7 @@ beforeEach(() => {
 const validUser = {
   username: 'test1',
   email: 'test@test.com',
-  password: '123456',
+  password: 'P4ssword',
 };
 
 const createUser = (user = validUser) => {
@@ -50,14 +50,14 @@ describe('User Registration', () => {
     await createUser();
     const userList = await User.findAll();
     const savedUser = userList[0];
-    expect(savedUser.password).not.toBe('1234');
+    expect(savedUser.password).not.toBe('P4ssword');
   });
 
   it('returns 400 if username is null', async () => {
     const response = await createUser({
       username: null,
       email: 'test@test.com',
-      password: '123456',
+      password: 'P4ssword',
     });
     expect(response.status).toBe(400);
   });
@@ -66,7 +66,7 @@ describe('User Registration', () => {
     const response = await createUser({
       username: null,
       email: 'test@test.com',
-      password: '123456',
+      password: 'P4ssword',
     });
     expect(response.body.validationErrors).not.toBeUndefined();
   });
@@ -75,7 +75,7 @@ describe('User Registration', () => {
     const response = await createUser({
       username: null,
       email: null,
-      password: '123456',
+      password: 'P4ssword',
     });
     expect(Object.keys(response.body.validationErrors)).toEqual([
       'username',
@@ -106,7 +106,7 @@ describe('User Registration', () => {
       const user = {
         username: 'test1',
         email: 'test@test.com',
-        password: '1234',
+        password: 'P4ssword',
       };
       user[field] = value;
       const response = await createUser(user);
