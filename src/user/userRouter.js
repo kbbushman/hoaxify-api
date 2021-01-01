@@ -24,7 +24,12 @@ router.post(
     .bail()
     .isLength({ min: 4, max: 32 })
     .withMessage('Must have min 4 and max 32 characters'),
-  check('email').notEmpty().withMessage('Email cannot be null'),
+  check('email')
+    .notEmpty()
+    .withMessage('Email cannot be null')
+    .bail()
+    .isEmail()
+    .withMessage('Email is not valid'),
   check('password').notEmpty().withMessage('Password cannot be null'),
   validateRequest,
   userController.create
