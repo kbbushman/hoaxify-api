@@ -1,10 +1,20 @@
+const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const User = require('./User');
+
+const generateToken = (length) => {
+  return crypto.randomBytes(length).toString('hex').substring(0, length);
+};
 
 const create = async (req, res) => {
   const { username, email, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
-  const user = { username, email, password: hash };
+  const user = {
+    username,
+    email,
+    password: hash,
+    activationToken: generateToken(16),
+  };
   await User.create(user);
   return res.send({ message: req.t('user_create_success') });
 };
