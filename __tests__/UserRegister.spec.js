@@ -14,7 +14,7 @@ beforeEach(() => {
 const validUser = {
   username: 'test1',
   email: 'test@test.com',
-  password: '1234',
+  password: '123456',
 };
 
 const createUser = (user = validUser) => {
@@ -57,7 +57,7 @@ describe('User Registration', () => {
     const response = await createUser({
       username: null,
       email: 'test@test.com',
-      password: '1234',
+      password: '123456',
     });
     expect(response.status).toBe(400);
   });
@@ -66,7 +66,7 @@ describe('User Registration', () => {
     const response = await createUser({
       username: null,
       email: 'test@test.com',
-      password: '1234',
+      password: '123456',
     });
     expect(response.body.validationErrors).not.toBeUndefined();
   });
@@ -75,7 +75,7 @@ describe('User Registration', () => {
     const response = await createUser({
       username: null,
       email: null,
-      password: '1234',
+      password: '123456',
     });
     expect(Object.keys(response.body.validationErrors)).toEqual([
       'username',
@@ -91,8 +91,9 @@ describe('User Registration', () => {
     ${'email'}    | ${null}            | ${'Email cannot be null'}
     ${'email'}    | ${'mail.com'}      | ${'Email is not valid'}
     ${'email'}    | ${'test.mail.com'} | ${'Email is not valid'}
-    ${'email'}    | ${'test@com'}      | ${'Email is not valid'}
+    ${'email'}    | ${'test@mail'}     | ${'Email is not valid'}
     ${'password'} | ${null}            | ${'Password cannot be null'}
+    ${'password'} | ${'passw'}         | ${'Password must be at least 6 characters'}
   `(
     'returns "$expectedMessage" when $field is $value',
     async ({ field, expectedMessage, value }) => {
@@ -103,7 +104,8 @@ describe('User Registration', () => {
       };
       user[field] = value;
       const response = await createUser(user);
-      expect(response.body.validationErrors[field]).toBe(expectedMessage);
+      const body = response.body;
+      expect(body.validationErrors[field]).toBe(expectedMessage);
     }
   );
 });
