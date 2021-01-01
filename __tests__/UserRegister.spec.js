@@ -17,8 +17,14 @@ const validUser = {
   password: 'P4ssword',
 };
 
-const createUser = (user = validUser) => {
-  return request(app).post('/api/v1/users').send(user);
+const createUser = (user = validUser, options = {}) => {
+  const agent = request(app).post('/api/v1/users');
+
+  if (options.language) {
+    agent.set('Accept-Language', options.language);
+  }
+
+  return agent.send(user);
 };
 
 describe('User Registration', () => {
@@ -144,13 +150,6 @@ describe('User Registration', () => {
 });
 
 describe('Internationalization', () => {
-  const createUser = (user = validUser) => {
-    return request(app)
-      .post('/api/v1/users')
-      .set('Accept-Language', 'es')
-      .send(user);
-  };
-
   const username_null = 'El nombre de usuario no puede ser nulo';
   const username_length =
     'Debe tener un mínimo de 4 y un máximo de 32 caracteres';
@@ -188,7 +187,7 @@ describe('Internationalization', () => {
         password: 'P4ssword',
       };
       user[field] = value;
-      const response = await createUser(user);
+      const response = await createUser(user, { language: 'es' });
       const body = response.body;
       expect(body.validationErrors[field]).toBe(expectedMessage);
     }
@@ -196,7 +195,7 @@ describe('Internationalization', () => {
 
   it(`returns "${email_inuse}" if email is already in use when language is set to Spanish`, async () => {
     await User.create({ ...validUser });
-    const response = await createUser();
+    const response = await createUser({ ...validUser }, { language: 'es' });
     expect(response.body.validationErrors.email).toBe(email_inuse);
   });
 });
