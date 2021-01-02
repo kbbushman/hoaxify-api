@@ -10,7 +10,7 @@ const generateToken = (length) => {
   return crypto.randomBytes(length).toString('hex').substring(0, length);
 };
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
   const { username, email, password } = req.body;
   const hash = await bcrypt.hash(password, 10);
   const user = {
@@ -21,32 +21,35 @@ const create = async (req, res) => {
   };
 
   const transaction = await sequelize.transaction();
+  await User.create(user, { transaction });
 
   try {
-    await User.create(user, { transaction });
     await emailService.sendAccountActivation(email, user.activationToken);
     await transaction.commit();
     return res.send({ message: req.t('user_create_success') });
   } catch (err) {
     transaction.rollback();
-    const { message } = new EmailException();
-    return res.status(502).send({ message: req.t(message) });
+    next(new EmailException());
   }
 };
 
-const activate = async (req, res) => {
+const activate = async (req, res, next) => {
   const { token } = req.params;
-  const user = await User.findOne({ where: { activationToken: token } });
 
-  if (!user) {
-    const { message } = new InvalidTokenException();
-    return res.status(400).send({ message: req.t(message) });
+  try {
+    const user = await User.findOne({ where: { activationToken: token } });
+
+    if (!user) {
+      throw new InvalidTokenException();
+    }
+
+    user.inactive = false;
+    user.activationToken = null;
+    await user.save();
+    return res.send({ message: req.t('account_activation_success') });
+  } catch (err) {
+    next(err);
   }
-
-  user.inactive = false;
-  user.activationToken = null;
-  await user.save();
-  return res.send({ message: req.t('account_activation_success') });
 };
 
 const findByEmail = async (email) => {
