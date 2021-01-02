@@ -335,4 +335,20 @@ describe('Account activation', () => {
       .send();
     expect(response.status).toBe(400);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${'Esta cuenta ya está activa o el token no es válido'}
+    ${'en'}  | ${'This account is already active or the token is invalid'}
+  `(
+    'returns $message when wrong token is sent and language is $language',
+    async ({ language, message }) => {
+      await createUser({ ...validUser }, { language });
+      const token = 'this-token-does-not-exist';
+      const response = await request(app)
+        .post('/api/v1/users/token/' + token)
+        .send();
+      expect(response.body.message).toBe(message);
+    }
+  );
 });
