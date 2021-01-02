@@ -37,6 +37,7 @@ const activate = async (req, res) => {
   const { token } = req.params;
   const user = await User.findOne({ where: { activationToken: token } });
   user.inactive = false;
+  user.activationToken = null;
   await user.save();
   return res.sendStatus(200);
 };
