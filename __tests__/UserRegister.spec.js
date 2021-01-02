@@ -337,14 +337,20 @@ describe('Account activation', () => {
   });
 
   it.each`
-    language | message
-    ${'es'}  | ${'Esta cuenta ya está activa o el token no es válido'}
-    ${'en'}  | ${'This account is already active or the token is invalid'}
+    language | tokenStatus  | message
+    ${'es'}  | ${'wrong'}   | ${'Esta cuenta ya está activa o el token no es válido'}
+    ${'en'}  | ${'wrong'}   | ${'This account is already active or the token is invalid'}
+    ${'es'}  | ${'correct'} | ${'Cuenta activada correctamente'}
+    ${'en'}  | ${'correct'} | ${'Account successfully activated'}
   `(
-    'returns $message when wrong token is sent and language is $language',
-    async ({ language, message }) => {
+    'returns $message when token is $tokenStatus and language is $language',
+    async ({ language, tokenStatus, message }) => {
       await createUser();
-      const token = 'this-token-does-not-exist';
+      let token = 'this-token-does-not-exist';
+      if (tokenStatus === 'correct') {
+        let users = await User.findAll();
+        token = users[0].activationToken;
+      }
       const response = await request(app)
         .post('/api/v1/users/token/' + token)
         .set('Accept-Language', language)
