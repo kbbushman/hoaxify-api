@@ -16,11 +16,14 @@ const create = async (req, res) => {
     password: hash,
     activationToken: generateToken(16),
   };
-  await User.create(user);
 
-  await emailService.sendAccountActivation(email, user.activationToken);
-
-  return res.send({ message: req.t('user_create_success') });
+  try {
+    await User.create(user);
+    await emailService.sendAccountActivation(email, user.activationToken);
+    return res.send({ message: req.t('user_create_success') });
+  } catch (err) {
+    return res.sendStatus(502);
+  }
 };
 
 const findByEmail = async (email) => {
