@@ -1,5 +1,6 @@
 const request = require('supertest');
-const nodemailerStub = require('nodemailer-stub');
+// const nodemailerStub = require('nodemailer-stub');
+const SMTPServer = require('smtp-server').SMTPServer;
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
@@ -174,12 +175,29 @@ describe('User Registration', () => {
   });
 
   it('sends an account activation email with activationToken', async () => {
+    let lastMail;
+    const server = new SMTPServer({
+      authOptional: true,
+      onData(stream, session, callback) {
+        let mailBody;
+        stream.on('data', (data) => {
+          mailBody += data.toString();
+        });
+        stream.on('end', () => {
+          lastMail = mailBody;
+          callback();
+        });
+      },
+    });
+
+    await server.listen(8587, 'localhost');
     await createUser();
-    const lastMail = nodemailerStub.interactsWithMail.lastMail();
-    expect(lastMail.to[0]).toBe('test@test.com');
+    await server.close();
+
     const users = await User.findAll();
     const savedUser = users[0];
-    expect(lastMail.content).toContain(savedUser.activationToken);
+    expect(lastMail).toContain('test@test.com');
+    expect(lastMail).toContain(savedUser.activationToken);
   });
 
   it('returns 502 response when sending email fails', async () => {
