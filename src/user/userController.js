@@ -22,7 +22,7 @@ const create = async (req, res) => {
     await emailService.sendAccountActivation(email, user.activationToken);
     return res.send({ message: req.t('user_create_success') });
   } catch (err) {
-    return res.status(502).send({ message: 'Email failure' });
+    return res.status(502).send({ message: req.t('email_failure') });
   }
 };
 
