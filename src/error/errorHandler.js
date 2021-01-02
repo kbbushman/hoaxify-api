@@ -9,5 +9,10 @@ module.exports = (err, req, res, next) => {
       (error) => (validationErrors[error.param] = req.t(error.msg))
     );
   }
-  res.status(status).send({ message: req.t(message), validationErrors });
+  res.status(status).send({
+    path: '',
+    timestamp: '',
+    message: req.t(message),
+    validationErrors,
+  });
 };
