@@ -33,11 +33,20 @@ const create = async (req, res) => {
   }
 };
 
+const activate = async (req, res) => {
+  const { token } = req.params;
+  const user = await User.findOne({ where: { activationToken: token } });
+  user.inactive = false;
+  await user.save();
+  return res.sendStatus(200);
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
 
 module.exports = {
   create,
+  activate,
   findByEmail,
 };
