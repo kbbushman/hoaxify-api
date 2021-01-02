@@ -46,7 +46,7 @@ const activate = async (req, res) => {
   user.inactive = false;
   user.activationToken = null;
   await user.save();
-  return res.sendStatus(200);
+  return res.send({ message: req.t('account_activation_success') });
 };
 
 const findByEmail = async (email) => {
