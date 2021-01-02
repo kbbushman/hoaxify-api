@@ -233,7 +233,7 @@ describe('User Registration', () => {
       email: validUser.email,
       password: 'P4ssword',
     });
-    expect(response.body.message).toBe('Validation Falure');
+    expect(response.body.message).toBe('Validation Failure');
   });
 });
 
