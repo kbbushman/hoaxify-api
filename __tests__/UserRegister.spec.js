@@ -226,6 +226,15 @@ describe('User Registration', () => {
     const users = await User.findAll();
     expect(users.length).toBe(0);
   });
+
+  it('returns validation failure message in error response body when validation fails', async () => {
+    const response = await createUser({
+      username: null,
+      email: validUser.email,
+      password: 'P4ssword',
+    });
+    expect(response.body.message).toBe('Validation Falure');
+  });
 });
 
 describe('Internationalization', () => {
@@ -241,6 +250,7 @@ describe('Internationalization', () => {
   const email_inuse = 'Correo electrónico ya en uso';
   const user_create_success = 'Usuario creado con éxito';
   const email_failure = 'Error de correo electrónico';
+  const validation_failure = 'Falla de validación';
 
   it.each`
     field         | value              | expectedMessage
@@ -289,6 +299,18 @@ describe('Internationalization', () => {
     simulateSmtpFailure = true;
     const response = await createUser({ ...validUser }, { language: 'es' });
     expect(response.body.message).toBe(email_failure);
+  });
+
+  it(`returns ${validation_failure} message in error response body when validation fails`, async () => {
+    const response = await createUser(
+      {
+        username: null,
+        email: validUser.email,
+        password: 'P4ssword',
+      },
+      { language: 'es' }
+    );
+    expect(response.body.message).toBe(validation_failure);
   });
 });
 
