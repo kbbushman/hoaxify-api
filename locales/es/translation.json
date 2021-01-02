@@ -9,5 +9,6 @@
   "email_inuse": "Correo electrónico ya en uso",
   "user_create_success": "Usuario creado con éxito",
   "email_failure": "Error de correo electrónico",
-  "account_activation_failure": "Esta cuenta ya está activa o el token no es válido"
+  "account_activation_failure": "Esta cuenta ya está activa o el token no es válido",
+  "account_activation_success": "Cuenta activada correctamente"
 }
