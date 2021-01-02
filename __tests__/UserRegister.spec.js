@@ -258,7 +258,7 @@ describe('Internationalization', () => {
     expect(response.body.message).toBe(user_create_success);
   });
 
-  it(`returns ${email_failure} message when sending email fails`, async () => {
+  it(`returns ${email_failure} message when sending email fails when language is set to Spanish`, async () => {
     const mockSendAccountActivation = jest
       .spyOn(emailService, 'sendAccountActivation')
       .mockRejectedValue({ message: 'Failed to deliver email' });
