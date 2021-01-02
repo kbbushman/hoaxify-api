@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const User = require('./User');
 const emailService = require('../email/emailService');
 const sequelize = require('../config/database');
+const EmailException = require('../email/EmailException');
 
 const generateToken = (length) => {
   return crypto.randomBytes(length).toString('hex').substring(0, length);
@@ -27,7 +28,8 @@ const create = async (req, res) => {
     return res.send({ message: req.t('user_create_success') });
   } catch (err) {
     transaction.rollback();
-    return res.status(502).send({ message: req.t('email_failure') });
+    const { message } = new EmailException();
+    return res.status(502).send({ message: req.t(message) });
   }
 };
 
