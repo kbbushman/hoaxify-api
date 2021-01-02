@@ -393,4 +393,13 @@ describe('Error Model', () => {
       'validationErrors',
     ]);
   });
+
+  it('returns path, timestamp, and message in response when request fails for non-validation reasons', async () => {
+    const token = 'this-token-does-not-exist';
+    const response = await request(app)
+      .post('/api/v1/users/token/' + token)
+      .send();
+    const body = response.body;
+    expect(Object.keys(body)).toEqual(['path', 'timestamp', 'message']);
+  });
 });
