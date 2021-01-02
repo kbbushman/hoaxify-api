@@ -183,11 +183,12 @@ describe('User Registration', () => {
   });
 
   it('returns 502 response when sending email fails', async () => {
-    jest
+    const mockSendAccountActivation = jest
       .spyOn(emailService, 'sendAccountActivation')
       .mockRejectedValue({ message: 'Failed to deliver email' });
     const response = await createUser();
     expect(response.status).toBe(502);
+    mockSendAccountActivation.mockRestore();
   });
 });
 
