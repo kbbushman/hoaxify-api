@@ -28,4 +28,10 @@ app.use(express.json());
 
 app.use('/api/v1/users', userRouter);
 
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  const { status, message } = err;
+  res.status(status).send({ message: req.t(message) });
+});
+
 module.exports = app;
