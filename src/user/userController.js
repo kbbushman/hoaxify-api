@@ -52,6 +52,15 @@ const activate = async (req, res, next) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  return res.send({
+    content: [],
+    page: 0,
+    size: 10,
+    totalPages: 0,
+  });
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
@@ -60,4 +69,5 @@ module.exports = {
   create,
   activate,
   findByEmail,
+  getUsers,
 };
