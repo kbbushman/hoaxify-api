@@ -49,4 +49,6 @@ router.post(
 
 router.post('/token/:token', userController.activate);
 
+router.get('/', userController.getUsers);
+
 module.exports = router;
