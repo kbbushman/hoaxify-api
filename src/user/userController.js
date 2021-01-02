@@ -40,7 +40,7 @@ const activate = async (req, res) => {
 
   if (!user) {
     const { message } = new InvalidTokenException();
-    return res.status(502).send({ message });
+    return res.status(400).send({ message });
   }
 
   user.inactive = false;
