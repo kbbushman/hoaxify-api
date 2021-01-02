@@ -291,3 +291,17 @@ describe('Internationalization', () => {
     expect(response.body.message).toBe(email_failure);
   });
 });
+
+describe('Account activation', () => {
+  it('activates the user account when correct token is sent', async () => {
+    await createUser();
+    let users = await User.findAll();
+    const token = users[0].activationToken;
+
+    await request(app)
+      .post('/api/v1/users/token/' + token)
+      .send();
+    users = await User.findAll();
+    expect(users[0].inactive).toBe(false);
+  });
+});
