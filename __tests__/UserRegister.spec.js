@@ -402,4 +402,13 @@ describe('Error Model', () => {
     const body = response.body;
     expect(Object.keys(body)).toEqual(['path', 'timestamp', 'message']);
   });
+
+  it('returns path in error body', async () => {
+    const token = 'this-token-does-not-exist';
+    const response = await request(app)
+      .post('/api/v1/users/token/' + token)
+      .send();
+    const body = response.body;
+    expect(body.path).toEqual('/api/v1/users/token/' + token);
+  });
 });
