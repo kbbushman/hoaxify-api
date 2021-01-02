@@ -381,3 +381,16 @@ describe('Account activation', () => {
     }
   );
 });
+
+describe('Error Model', () => {
+  it('returns path, timestamp, message and validationErrors in response on validation failure', async () => {
+    const response = await createUser({ ...validUser, username: null });
+    const body = response.body;
+    expect(Object.keys(body)).toEqual([
+      'path',
+      'timestamp',
+      'message',
+      'validationErrors',
+    ]);
+  });
+});
