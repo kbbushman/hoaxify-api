@@ -3,6 +3,7 @@ const nodemailerStub = require('nodemailer-stub');
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
+const emailService = require('../src/email/emailService');
 
 beforeAll(() => {
   return sequelize.sync();
@@ -179,6 +180,14 @@ describe('User Registration', () => {
     const users = await User.findAll();
     const savedUser = users[0];
     expect(lastMail.content).toContain(savedUser.activationToken);
+  });
+
+  it('returns 502 response when sending email fails', async () => {
+    jest
+      .spyOn(emailService, 'sendAccountActivation')
+      .mockRejectedValue({ message: 'Failed to deliver email' });
+    const response = await createUser();
+    expect(response.status).toBe(502);
   });
 });
 
