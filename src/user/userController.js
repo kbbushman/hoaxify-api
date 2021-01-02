@@ -4,6 +4,7 @@ const User = require('./User');
 const emailService = require('../email/emailService');
 const sequelize = require('../config/database');
 const EmailException = require('../email/EmailException');
+const InvalidTokenException = require('./InvalidTokenException');
 
 const generateToken = (length) => {
   return crypto.randomBytes(length).toString('hex').substring(0, length);
@@ -36,6 +37,12 @@ const create = async (req, res) => {
 const activate = async (req, res) => {
   const { token } = req.params;
   const user = await User.findOne({ where: { activationToken: token } });
+
+  if (!user) {
+    const { message } = new InvalidTokenException();
+    return res.status(502).send({ message });
+  }
+
   user.inactive = false;
   user.activationToken = null;
   await user.save();
