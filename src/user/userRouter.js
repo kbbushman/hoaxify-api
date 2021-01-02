@@ -50,4 +50,6 @@ router.post(
   userController.create
 );
 
+router.post('/token/:token', userController.activate);
+
 module.exports = router;
