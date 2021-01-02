@@ -213,6 +213,7 @@ describe('Internationalization', () => {
     'La contraseña debe tener al menos 1 letra minúscula, 1 letra mayúscula y 1 número';
   const email_inuse = 'Correo electrónico ya en uso';
   const user_create_success = 'Usuario creado con éxito';
+  const email_failure = 'Error de correo electrónico';
 
   it.each`
     field         | value              | expectedMessage
@@ -255,5 +256,14 @@ describe('Internationalization', () => {
   it(`returns a success message of ${user_create_success} on successful signup request when language is set to Spanish`, async () => {
     const response = await createUser({ ...validUser }, { language: 'es' });
     expect(response.body.message).toBe(user_create_success);
+  });
+
+  it(`returns ${email_failure} message when sending email fails`, async () => {
+    const mockSendAccountActivation = jest
+      .spyOn(emailService, 'sendAccountActivation')
+      .mockRejectedValue({ message: 'Failed to deliver email' });
+    const response = await createUser({ ...validUser }, { language: 'es' });
+    mockSendAccountActivation.mockRestore();
+    expect(response.body.message).toBe(email_failure);
   });
 });
