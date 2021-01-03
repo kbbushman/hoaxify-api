@@ -55,6 +55,7 @@ const activate = async (req, res, next) => {
 const getUsers = async (req, res) => {
   const users = await User.findAll({
     where: { inactive: false },
+    attributes: ['id', 'username', 'email'],
     limit: 10,
   });
   return res.send({
