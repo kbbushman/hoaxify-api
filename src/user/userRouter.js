@@ -2,6 +2,7 @@ const express = require('express');
 const { check, validationResult } = require('express-validator');
 const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
+const pagination = require('../middleware/pagination');
 
 const router = express.Router();
 
@@ -49,6 +50,6 @@ router.post(
 
 router.post('/token/:token', userController.activate);
 
-router.get('/', userController.getUsers);
+router.get('/', pagination, userController.getUsers);
 
 module.exports = router;
