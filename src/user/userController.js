@@ -53,8 +53,9 @@ const activate = async (req, res, next) => {
 };
 
 const getUsers = async (req, res) => {
+  const users = await User.findAll({ limit: 10 });
   return res.send({
-    content: [],
+    content: users,
     page: 0,
     size: 10,
     totalPages: 0,
