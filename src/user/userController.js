@@ -70,9 +70,16 @@ const getUsers = async (req, res) => {
   });
 };
 
-const getUser = (req, res) => {
-  // res.status(404).send({ message: req.t('user_not_found') });
-  throw new UserNotFoundException();
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.params.id } });
+    if (!user) {
+      throw new UserNotFoundException();
+    }
+    return res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
 };
 
 const findByEmail = async (email) => {
