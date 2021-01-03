@@ -114,4 +114,18 @@ describe('Get User', () => {
     const response = await request(app).get('/api/v1/users/5');
     expect(response.status).toBe(404);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${'Usuario no encontrado'}
+    ${'en'}  | ${'User not found'}
+  `(
+    'returns $message for unknown user when language is set to $language',
+    async ({ language, message }) => {
+      const response = await request(app)
+        .get('/api/v1/users/5')
+        .set('Accept-Language', language);
+      expect(response.body.message).toBe(message);
+    }
+  );
 });
