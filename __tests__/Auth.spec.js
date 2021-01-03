@@ -46,6 +46,6 @@ describe('Authentication', () => {
     });
     expect(response.body.id).toBe(user.id);
     expect(response.body.username).toBe(user.username);
-    expect(Object.keys(response.body).toEqual(['id', 'username']));
+    expect(Object.keys(response.body)).toEqual(['id', 'username']);
   });
 });
