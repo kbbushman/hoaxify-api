@@ -56,4 +56,16 @@ describe('Authentication', () => {
     });
     expect(response.status).toBe(401);
   });
+
+  it('returns proper error body when authenticaion fails', async () => {
+    const nowInMillis = new Date().getTime();
+    const response = await postAuthentication({
+      email: 'test@test.com',
+      password: 'P4ssword',
+    });
+    const error = response.body;
+    expect(error.path).toBe('/api/v1/auth');
+    expect(error.timestamp).toBeGreaterThan(nowInMillis);
+    expect(Object.keys(error)).toEqual(['path', 'timestamp', 'message']);
+  });
 });
