@@ -24,8 +24,12 @@ const addUser = async () => {
   return await User.create(user);
 };
 
-const postAuthentication = async (credentials) => {
-  return await request(app).post('/api/v1/auth').send(credentials);
+const postAuthentication = async (credentials, options = {}) => {
+  let agent = request(app).post('/api/v1/auth');
+  if (options.language) {
+    agent.set('Accept-Language', options.language);
+  }
+  return await agent.send(credentials);
 };
 
 describe('Authentication', () => {
