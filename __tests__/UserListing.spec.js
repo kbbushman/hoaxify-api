@@ -17,12 +17,12 @@ const getUsers = () => {
 
 describe('Listing Users', () => {
   it('returns 200 ok when there are no users in the database', async () => {
-    const response = await request(app).get('/api/v1/users');
+    const response = await getUsers();
     expect(response.status).toBe(200);
   });
 
   it('returns page object as response body', async () => {
-    const response = await request(app).get('/api/v1/users');
+    const response = await getUsers();
     expect(response.body).toEqual({
       content: [],
       page: 0,
@@ -38,7 +38,7 @@ describe('Listing Users', () => {
         email: `user${i + 1}@test.com`,
       });
     }
-    const response = await request(app).get('/api/v1/users');
+    const response = await getUsers();
     expect(response.body.content.length).toBe(10);
   });
 });
