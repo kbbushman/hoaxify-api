@@ -1,4 +1,5 @@
 const User = require('../user/User');
+const AuthenticationException = require('./AuthenticationException');
 
 const login = async (req, res, next) => {
   try {
@@ -7,10 +8,7 @@ const login = async (req, res, next) => {
       attributes: ['id', 'username'],
     });
     if (!user) {
-      // const error = new Error('User does not exist');
-      // error.status = 401;
-      // throw error;
-      return res.sendStatus(401);
+      throw new AuthenticationException();
     }
     return res.send(user);
   } catch (err) {
