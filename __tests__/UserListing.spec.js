@@ -141,4 +141,14 @@ describe('Get User', () => {
     expect(error.timestamp).toBeGreaterThan(nowInMillis);
     expect(Object.keys(error)).toEqual(['path', 'timestamp', 'message']);
   });
+
+  it('returns 200 when an active user exists', async () => {
+    const user = await User.create({
+      username: 'test1',
+      email: 'test1@test.com',
+      inactive: false,
+    });
+    const response = await getUser(user.id);
+    expect(response.status).toBe(200);
+  });
 });
