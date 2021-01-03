@@ -69,6 +69,10 @@ const getUsers = async (req, res) => {
   });
 };
 
+const getUser = async (req, res) => {
+  res.status(404).send({ message: req.t('user_not_found') });
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
@@ -78,4 +82,5 @@ module.exports = {
   activate,
   findByEmail,
   getUsers,
+  getUser,
 };
