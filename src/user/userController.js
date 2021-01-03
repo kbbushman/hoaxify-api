@@ -67,7 +67,7 @@ const getUsers = async (req, res) => {
 
   return res.send({
     content: usersWithCount.rows,
-    page: Number.parseInt(page),
+    page: page,
     size: 10,
     totalPages: Math.ceil(usersWithCount.count / pageSize),
   });
