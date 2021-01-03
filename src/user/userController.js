@@ -72,11 +72,14 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: { id: req.params.id } });
+    const user = await User.findOne({
+      where: { id: req.params.id },
+      attributes: ['id', 'username', 'email'],
+    });
     if (!user) {
       throw new UserNotFoundException();
     }
-    return res.sendStatus(200);
+    return res.status(200).send(user);
   } catch (err) {
     next(err);
   }
