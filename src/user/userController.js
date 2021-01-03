@@ -73,7 +73,7 @@ const getUsers = async (req, res) => {
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findOne({
-      where: { id: req.params.id },
+      where: { id: req.params.id, inactive: false },
       attributes: ['id', 'username', 'email'],
     });
     if (!user) {
