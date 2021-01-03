@@ -110,8 +110,12 @@ describe('Listing Users', () => {
 });
 
 describe('Get User', () => {
+  const getUser = (id = 5) => {
+    return request(app).get(`/api/v1/users/${id}`);
+  };
+
   it('returns 404 when user not found', async () => {
-    const response = await request(app).get('/api/v1/users/5');
+    const response = await getUser();
     expect(response.status).toBe(404);
   });
 
@@ -131,7 +135,7 @@ describe('Get User', () => {
 
   it('returns proper error body when user not found', async () => {
     const nowInMillis = new Date().getTime();
-    const response = await request(app).get('/api/v1/users/5');
+    const response = await getUser();
     const error = response.body;
     expect(error.path).toBe('/api/v1/users/5');
     expect(error.timestamp).toBeGreaterThan(nowInMillis);
