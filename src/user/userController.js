@@ -53,7 +53,10 @@ const activate = async (req, res, next) => {
 };
 
 const getUsers = async (req, res) => {
-  const users = await User.findAll({ limit: 10 });
+  const users = await User.findAll({
+    where: { inactive: false },
+    limit: 10,
+  });
   return res.send({
     content: users,
     page: 0,
