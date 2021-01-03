@@ -53,7 +53,10 @@ const activate = async (req, res, next) => {
 };
 
 const getUsers = async (req, res) => {
-  let page = req.query.page || 0;
+  let page = req.query.page ? Number.parseInt(req.query.page) : 0;
+  if (page < 0) {
+    page = 0;
+  }
   const pageSize = 10;
   const usersWithCount = await User.findAndCountAll({
     where: { inactive: false },
