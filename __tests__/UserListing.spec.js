@@ -68,7 +68,7 @@ describe('Listing Users', () => {
 
   it('returns second page of users and page indicator when page is set to 1 in request parameter', async () => {
     await addUsers(11);
-    const response = await request(app).get('/api/v1/users').query({ page: 1 });
+    const response = await getUsers().query({ page: 1 });
     expect(response.body.content[0].username).toBe('user11');
     expect(response.body.page).toBe(1);
   });
