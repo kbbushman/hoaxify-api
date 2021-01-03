@@ -11,6 +11,10 @@ beforeEach(() => {
   return User.destroy({ truncate: true });
 });
 
+const getUsers = () => {
+  return request(app).get('/api/v1/users');
+};
+
 describe('Listing Users', () => {
   it('returns 200 ok when there are no users in the database', async () => {
     const response = await request(app).get('/api/v1/users');
