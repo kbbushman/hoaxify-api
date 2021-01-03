@@ -53,23 +53,19 @@ const activate = async (req, res, next) => {
 };
 
 const getUsers = async (req, res) => {
-  let page = req.query.page ? Number.parseInt(req.query.page) : 0;
-  let pageSize = req.query.size ? Number.parseInt(req.query.size) : 10;
-  if (page < 0) {
-    page = 0;
-  }
+  const { size, page } = req.pagination;
   const usersWithCount = await User.findAndCountAll({
     where: { inactive: false },
     attributes: ['id', 'username', 'email'],
-    limit: pageSize,
-    offset: page * pageSize,
+    limit: size,
+    offset: page * size,
   });
 
   return res.send({
     content: usersWithCount.rows,
     page: page,
-    size: pageSize,
-    totalPages: Math.ceil(usersWithCount.count / pageSize),
+    size: size,
+    totalPages: Math.ceil(usersWithCount.count / size),
   });
 };
 
