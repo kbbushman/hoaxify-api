@@ -109,4 +109,17 @@ describe('Authentication', () => {
     });
     expect(response.status).toBe(403);
   });
+
+  it('returns proper error body when inactive authenticaion fails', async () => {
+    await addUser({ ...activeUser, inactive: true });
+    const nowInMillis = new Date().getTime();
+    const response = await postAuthentication({
+      email: 'test@test.com',
+      password: 'P4ssword',
+    });
+    const error = response.body;
+    expect(error.path).toBe('/api/v1/auth');
+    expect(error.timestamp).toBeGreaterThan(nowInMillis);
+    expect(Object.keys(error)).toEqual(['path', 'timestamp', 'message']);
+  });
 });
