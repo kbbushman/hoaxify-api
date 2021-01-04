@@ -12,13 +12,14 @@ beforeEach(async () => {
   await User.destroy({ truncate: true });
 });
 
-const addUser = async () => {
-  const user = {
-    username: 'test1',
-    email: 'test@test.com',
-    password: 'P4ssword',
-    inactive: false,
-  };
+const activeUser = {
+  username: 'test1',
+  email: 'test@test.com',
+  password: 'P4ssword',
+  inactive: false,
+};
+
+const addUser = async (user = { ...activeUser }) => {
   const hash = await bcrypt.hash(user.password, 10);
   user.password = hash;
   return await User.create(user);
