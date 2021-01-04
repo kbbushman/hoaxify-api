@@ -100,4 +100,13 @@ describe('Authentication', () => {
     });
     expect(response.status).toBe(401);
   });
+
+  it('returns 403 when logging in with an inactive account', async () => {
+    await addUser({ ...activeUser, inactive: true });
+    const response = await postAuthentication({
+      email: 'test@test.com',
+      password: 'P4ssword',
+    });
+    expect(response.status).toBe(403);
+  });
 });
