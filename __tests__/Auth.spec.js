@@ -72,4 +72,22 @@ describe('Authentication', () => {
     expect(error.timestamp).toBeGreaterThan(nowInMillis);
     expect(Object.keys(error)).toEqual(['path', 'timestamp', 'message']);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${'credenciales incorrectas'}
+    ${'en'}  | ${'Incorrect credentials'}
+  `(
+    'returns $message when authentication fails and language is set to $language',
+    async ({ language, message }) => {
+      const response = await postAuthentication(
+        {
+          email: 'test@test.com',
+          password: 'P4ssword',
+        },
+        { language }
+      );
+      expect(response.body.message).toBe(message);
+    }
+  );
 });
