@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
+const { use } = require('../config/emailTransporter');
 const User = require('../user/User');
 const AuthenticationException = require('./AuthenticationException');
+const ForbiddenException = require('./ForbiddenException');
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -15,6 +17,10 @@ const login = async (req, res, next) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
       throw new AuthenticationException();
+    }
+
+    if (user.inactive) {
+      throw new ForbiddenException();
     }
 
     return res.send({ id: user.id, username: user.username });
