@@ -75,7 +75,7 @@ describe('Authentication', () => {
 
   it.each`
     language | message
-    ${'es'}  | ${'credenciales incorrectas'}
+    ${'es'}  | ${'Credenciales incorrectas'}
     ${'en'}  | ${'Incorrect credentials'}
   `(
     'returns $message when authentication fails and language is set to $language',
