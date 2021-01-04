@@ -13,5 +13,6 @@
   "account_activation_success": "Cuenta activada correctamente",
   "validation_failure": "Falla de validación",
   "user_not_found": "Usuario no encontrado",
-  "authentication_failure": "Credenciales incorrectas"
+  "authentication_failure": "Credenciales incorrectas",
+  "inactive_authentication_failure": "Cuenta inactiva"
 }
