@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { use } = require('../config/emailTransporter');
 const User = require('../user/User');
 const AuthenticationException = require('./AuthenticationException');
 const ForbiddenException = require('./ForbiddenException');
