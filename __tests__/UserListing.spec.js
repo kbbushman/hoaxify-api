@@ -2,6 +2,8 @@ const request = require('supertest');
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
+const en = require('../locales/en/translation.json');
+const es = require('../locales/es/translation.json');
 
 beforeAll(async () => {
   await sequelize.sync();
@@ -121,8 +123,8 @@ describe('Get User', () => {
 
   it.each`
     language | message
-    ${'es'}  | ${'Usuario no encontrado'}
-    ${'en'}  | ${'User not found'}
+    ${'es'}  | ${es.user_not_found}
+    ${'en'}  | ${en.user_not_found}
   `(
     'returns $message for unknown user when language is set to $language',
     async ({ language, message }) => {
