@@ -54,4 +54,6 @@ router.get('/', pagination, userController.getUsers);
 
 router.get('/:id', userController.getUser);
 
+router.put('/:id', userController.update);
+
 module.exports = router;
