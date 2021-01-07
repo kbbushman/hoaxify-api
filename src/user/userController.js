@@ -85,6 +85,10 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const update = (req, res) => {
+  return res.sendStatus(403);
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
@@ -95,4 +99,5 @@ module.exports = {
   findByEmail,
   getUsers,
   getUser,
+  update,
 };
