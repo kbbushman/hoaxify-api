@@ -14,5 +14,6 @@
   "validation_failure": "Falla de validación",
   "user_not_found": "Usuario no encontrado",
   "authentication_failure": "Credenciales incorrectas",
-  "inactive_authentication_failure": "Cuenta inactiva"
+  "inactive_authentication_failure": "Cuenta inactiva",
+  "unauthorized_user_update": "No tienes autorización para actualizar al usuario"
 }
