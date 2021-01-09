@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../user/User');
 const AuthenticationException = require('./AuthenticationException');
-const ForbiddenException = require('./ForbiddenException');
+const ForbiddenException = require('../error/ForbiddenException');
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
