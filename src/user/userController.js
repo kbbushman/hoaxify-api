@@ -6,6 +6,7 @@ const sequelize = require('../config/database');
 const EmailException = require('../email/EmailException');
 const InvalidTokenException = require('./InvalidTokenException');
 const UserNotFoundException = require('./UserNotFoundException');
+const ForbiddenException = require('../error/ForbiddenException');
 
 const generateToken = (length) => {
   return crypto.randomBytes(length).toString('hex').substring(0, length);
@@ -86,7 +87,7 @@ const getUser = async (req, res, next) => {
 };
 
 const update = (req, res) => {
-  return res.sendStatus(403);
+  throw new ForbiddenException('unauthorized_user_update');
 };
 
 const findByEmail = async (email) => {
