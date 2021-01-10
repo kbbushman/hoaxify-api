@@ -14,9 +14,17 @@ beforeEach(async () => {
   await User.destroy({ truncate: true });
 });
 
+const updateUser = (id = 5, body = null, options = {}) => {
+  const agent = request(app).put(`/api/v1/users/${id}`);
+  if (options.language) {
+    agent.set('Accept-Language', options.language);
+  }
+  return agent.send(body);
+};
+
 describe('User Update', () => {
   it('returns forbidden when request sent without basic authorization', async () => {
-    const response = await request(app).put('/api/v1/users/5').send();
+    const response = await updateUser();
     expect(response.status).toBe(403);
   });
 
@@ -28,10 +36,7 @@ describe('User Update', () => {
     'returns error body with $message for unauthorized request when language is set to $language',
     async ({ language, message }) => {
       const nowInMillis = new Date().getTime();
-      const response = await request(app)
-        .put('/api/v1/users/5')
-        .set('Accept-Language', language)
-        .send();
+      const response = await updateUser(5, null, { language });
       expect(response.body.path).toBe('/api/v1/users/5');
       expect(response.body.timestamp).toBeGreaterThan(nowInMillis);
       expect(response.body.message).toBe(message);
