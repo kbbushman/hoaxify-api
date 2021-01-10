@@ -1,5 +1,5 @@
 const request = require('supertest');
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
