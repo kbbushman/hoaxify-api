@@ -34,9 +34,7 @@ const updateUser = (id = 5, body = null, options = {}) => {
   }
   if (options.auth) {
     const { email, password } = options.auth;
-    const merged = `${email}:${password}`;
-    const base64 = Buffer.from(merged).toString('base64');
-    agent.set('Authorization', `Basic ${base64}`);
+    agent.auth(email, password);
   }
   return agent.send(body);
 };
