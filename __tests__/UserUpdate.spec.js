@@ -14,6 +14,19 @@ beforeEach(async () => {
   await User.destroy({ truncate: true });
 });
 
+const activeUser = {
+  username: 'test1',
+  email: 'test@test.com',
+  password: 'P4ssword',
+  inactive: false,
+};
+
+const addUser = async (user = { ...activeUser }) => {
+  const hash = await bcrypt.hash(user.password, 10);
+  user.password = hash;
+  return await User.create(user);
+};
+
 const updateUser = (id = 5, body = null, options = {}) => {
   const agent = request(app).put(`/api/v1/users/${id}`);
   if (options.language) {
