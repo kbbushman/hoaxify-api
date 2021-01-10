@@ -75,4 +75,17 @@ describe('User Update', () => {
     });
     expect(response.status).toBe(403);
   });
+
+  it('returns forbidden when update request is sent with correct credentials for different user', async () => {
+    await addUser();
+    const userToBeUpdated = await addUser({
+      ...activeUser,
+      username: 'use2',
+      email: 'user2@gmail.com',
+    });
+    const response = await updateUser(userToBeUpdated.id, null, {
+      auth: { email: 'test1@gmail.com', password: 'Passwrod' },
+    });
+    expect(response.status).toBe(403);
+  });
 });
