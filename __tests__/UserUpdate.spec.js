@@ -55,4 +55,12 @@ describe('User Update', () => {
       expect(response.body.message).toBe(message);
     }
   );
+
+  it('returns forbidden when request sent with incorrect email in basic authorization', async () => {
+    await addUser();
+    const response = await updateUser(5, null, {
+      auth: { email: 'test1000@gmail.com', password: 'P4sswrod' },
+    });
+    expect(response.status).toBe(403);
+  });
 });
