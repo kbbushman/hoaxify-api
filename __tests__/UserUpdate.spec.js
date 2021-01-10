@@ -32,6 +32,12 @@ const updateUser = (id = 5, body = null, options = {}) => {
   if (options.language) {
     agent.set('Accept-Language', options.language);
   }
+  if (options.auth) {
+    const { email, password } = options.auth;
+    const merged = `${email}:${password}`;
+    const base64 = Buffer.from(merged).toString('base64');
+    agent.set('Authorization', `Basic ${base64}`);
+  }
   return agent.send(body);
 };
 
