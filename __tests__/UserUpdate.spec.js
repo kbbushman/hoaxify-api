@@ -88,4 +88,12 @@ describe('User Update', () => {
     });
     expect(response.status).toBe(403);
   });
+
+  it('returns forbidden when update request is sent by inactive user with correct credentials', async () => {
+    const inactiveUser = await addUser({ ...activeUser, inactive: true });
+    const response = await updateUser(inactiveUser.id, null, {
+      auth: { email: 'test1@gmail.com', password: 'P4sswrod' },
+    });
+    expect(response.status).toBe(403);
+  });
 });
