@@ -51,7 +51,7 @@ router.post(
 
 router.post('/token/:token', userController.activate);
 
-router.get('/', pagination, userController.getUsers);
+router.get('/', pagination, basicAuthentication, userController.getUsers);
 
 router.get('/:id', userController.getUser);
 
