@@ -111,6 +111,9 @@ const update = async (req, res, next) => {
         throw new ForbiddenException('unauthorized_user_update');
       }
 
+      user.username = req.body.username;
+      await user.save();
+
       return res.send();
     }
     throw new ForbiddenException('unauthorized_user_update');
