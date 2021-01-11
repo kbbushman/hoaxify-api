@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const Sequelize = require('sequelize');
 const User = require('./User');
 const emailService = require('../email/emailService');
 const sequelize = require('../config/database');
@@ -55,9 +56,16 @@ const activate = async (req, res, next) => {
 };
 
 const getUsers = async (req, res) => {
+  const { authenticatedUser } = req;
   const { size, page } = req.pagination;
+
   const usersWithCount = await User.findAndCountAll({
-    where: { inactive: false },
+    where: {
+      inactive: false,
+      id: {
+        [Sequelize.Op.not]: authenticatedUser ? authenticatedUser.id : 0,
+      },
+    },
     attributes: ['id', 'username', 'email'],
     limit: size,
     offset: page * size,
