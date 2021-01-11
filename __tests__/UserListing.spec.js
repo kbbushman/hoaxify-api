@@ -13,8 +13,13 @@ beforeEach(async () => {
   await User.destroy({ truncate: true });
 });
 
-const getUsers = () => {
-  return request(app).get('/api/v1/users');
+const getUsers = (options = {}) => {
+  const agent = request(app).get('/api/v1/users');
+  if (options.auth) {
+    const { email, password } = options.auth;
+    agent.auth(email, password);
+  }
+  return agent;
 };
 
 const addUsers = async (activeUserCount, inactiveUserCount = 0) => {
