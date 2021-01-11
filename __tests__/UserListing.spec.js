@@ -109,6 +109,14 @@ describe('Listing Users', () => {
     expect(response.body.size).toBe(10);
     expect(response.body.page).toBe(0);
   });
+
+  it('returns user page with out logged in user when request has valid authorization', async () => {
+    await addUsers(11);
+    const response = await getUsers({
+      auth: { email: 'test1@test.com', password: 'P4ssword' },
+    });
+    expect(response.body.totalPages).toBe(1);
+  });
 });
 
 describe('Get User', () => {
