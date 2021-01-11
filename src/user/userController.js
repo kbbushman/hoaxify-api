@@ -87,36 +87,19 @@ const getUser = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-  const authorization = req.headers.authorization;
+  const authenticatedUser = req.authenticatedUser;
   try {
-    if (authorization) {
-      const encoded = authorization.substring(6);
-      const decoded = Buffer.from(encoded, 'base64').toString('ascii');
-      const [email, password] = decoded.split(':');
-      const user = await User.findOne({ where: { email } });
-      if (!user) {
-        throw new ForbiddenException('unauthorized_user_update');
-      }
-
-      if (user.id.toString() !== req.params.id) {
-        throw new ForbiddenException('unauthorized_user_update');
-      }
-
-      if (user.inactive) {
-        throw new ForbiddenException('unauthorized_user_update');
-      }
-
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        throw new ForbiddenException('unauthorized_user_update');
-      }
-
-      user.username = req.body.username;
-      await user.save();
-
-      return res.send();
+    if (
+      !authenticatedUser ||
+      authenticatedUser.id.toString() !== req.params.id
+    ) {
+      throw new ForbiddenException('unauthorized_user_update');
     }
-    throw new ForbiddenException('unauthorized_user_update');
+    const user = await User.findOne({ where: { id: req.params.id } });
+    user.username = req.body.username;
+    await user.save();
+
+    return res.send();
   } catch (err) {
     next(err);
   }
