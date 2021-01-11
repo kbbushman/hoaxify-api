@@ -86,8 +86,37 @@ const getUser = async (req, res, next) => {
   }
 };
 
-const update = (req, res) => {
-  throw new ForbiddenException('unauthorized_user_update');
+const update = async (req, res, next) => {
+  const authorization = req.headers.authorization;
+  try {
+    if (authorization) {
+      const encoded = authorization.substring(6);
+      const decoded = Buffer.from(encoded, 'base64').toString('ascii');
+      const [email, password] = decoded.split(':');
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        throw new ForbiddenException('unauthorized_user_update');
+      }
+
+      if (user.id.toString() !== req.params.id) {
+        throw new ForbiddenException('unauthorized_user_update');
+      }
+
+      if (user.inactive) {
+        throw new ForbiddenException('unauthorized_user_update');
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        throw new ForbiddenException('unauthorized_user_update');
+      }
+
+      return res.send();
+    }
+    throw new ForbiddenException('unauthorized_user_update');
+  } catch (err) {
+    next(err);
+  }
 };
 
 const findByEmail = async (email) => {
