@@ -161,7 +161,7 @@ describe('Authentication', () => {
   it('returns token in response body when credentials are correct', async () => {
     await addUser();
     const response = await postAuthentication({
-      email: 'test1@test.com',
+      email: 'test@test.com',
       password: 'P4ssword',
     });
     expect(response.body.token).not.toBeUndefined();
