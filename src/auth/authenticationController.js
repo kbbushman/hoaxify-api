@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../user/User');
 const AuthenticationException = require('./AuthenticationException');
 const ForbiddenException = require('../error/ForbiddenException');
@@ -22,7 +23,9 @@ const login = async (req, res, next) => {
       throw new ForbiddenException();
     }
 
-    return res.send({ id: user.id, username: user.username });
+    const token = jwt.sign({ id: user.id }, 'temporary-secret');
+
+    return res.send({ id: user.id, username: user.username, token });
   } catch (err) {
     next(err);
   }
