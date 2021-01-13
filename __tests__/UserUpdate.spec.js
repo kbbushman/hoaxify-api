@@ -27,15 +27,25 @@ const addUser = async (user = { ...activeUser }) => {
   return await User.create(user);
 };
 
-const updateUser = (id = 5, body = null, options = {}) => {
-  const agent = request(app).put(`/api/v1/users/${id}`);
+const updateUser = async (id = 5, body = null, options = {}) => {
+  let agent = request(app);
+  let token;
+
   if (options.language) {
     agent.set('Accept-Language', options.language);
   }
+
   if (options.auth) {
-    const { email, password } = options.auth;
-    agent.auth(email, password);
+    const response = await agent.post('/api/v1/auth').send(options.auth);
+    token = response.body.token;
   }
+
+  agent = request(app).put(`/api/v1/users/${id}`);
+
+  if (token) {
+    agent.set('Authorization', `Bearer ${token}`);
+  }
+
   return agent.send(body);
 };
 
@@ -106,7 +116,7 @@ describe('User Update', () => {
     expect(response.status).toBe(200);
   });
 
-  it('updates username in databse when valid update request sent from authorized user', async () => {
+  fit('updates username in databse when valid update request sent from authorized user', async () => {
     const savedUser = await addUser();
     const validUpdate = { username: 'test1-updated' };
     await updateUser(savedUser.id, validUpdate, {
