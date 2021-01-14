@@ -31,16 +31,16 @@ const updateUser = async (id = 5, body = null, options = {}) => {
   let agent = request(app);
   let token;
 
-  if (options.language) {
-    agent.set('Accept-Language', options.language);
-  }
-
   if (options.auth) {
     const response = await agent.post('/api/v1/auth').send(options.auth);
     token = response.body.token;
   }
 
   agent = request(app).put(`/api/v1/users/${id}`);
+
+  if (options.language) {
+    agent.set('Accept-Language', options.language);
+  }
 
   if (token) {
     agent.set('Authorization', `Bearer ${token}`);
@@ -116,7 +116,7 @@ describe('User Update', () => {
     expect(response.status).toBe(200);
   });
 
-  fit('updates username in databse when valid update request sent from authorized user', async () => {
+  it('updates username in databse when valid update request sent from authorized user', async () => {
     const savedUser = await addUser();
     const validUpdate = { username: 'test1-updated' };
     await updateUser(savedUser.id, validUpdate, {
