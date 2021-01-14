@@ -4,6 +4,7 @@ const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
 const basicAuthentication = require('../middleware/basicAuthentication');
+const tokenAuthentication = require('../middleware/tokenAuthentication');
 
 const router = express.Router();
 
@@ -55,6 +56,6 @@ router.get('/', pagination, basicAuthentication, userController.getUsers);
 
 router.get('/:id', userController.getUser);
 
-router.put('/:id', basicAuthentication, userController.update);
+router.put('/:id', tokenAuthentication, userController.update);
 
 module.exports = router;
