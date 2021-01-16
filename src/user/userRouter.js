@@ -3,7 +3,6 @@ const { check, validationResult } = require('express-validator');
 const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
-const basicAuthentication = require('../middleware/basicAuthentication');
 const tokenAuthentication = require('../middleware/tokenAuthentication');
 
 const router = express.Router();
@@ -52,7 +51,7 @@ router.post(
 
 router.post('/token/:token', userController.activate);
 
-router.get('/', pagination, basicAuthentication, userController.getUsers);
+router.get('/', pagination, tokenAuthentication, userController.getUsers);
 
 router.get('/:id', userController.getUser);
 
