@@ -125,4 +125,9 @@ describe('User Update', () => {
     const inDBUser = await User.findOne({ where: { id: savedUser.id } });
     expect(inDBUser.username).toBe(validUpdate.username);
   });
+
+  it('returns 403 when token is not valid', async () => {
+    const response = await updateUser(5, null, { token: '123' });
+    expect(response.status).toBe(403);
+  });
 });
