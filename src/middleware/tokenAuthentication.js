@@ -9,7 +9,7 @@ const tokenAuthentication = async (req, res, next) => {
       const user = await verify(token);
       req.authenticatedUser = user;
     } catch (err) {
-      next(err);
+      // eslint-disable-next-line no-empty
     }
   }
   next();
