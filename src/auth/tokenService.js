@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const Token = require('./Token');
 const { randomString } = require('../shared/generator');
 
@@ -11,8 +10,10 @@ const createToken = async (user) => {
   return token;
 };
 
-const verify = (token) => {
-  return jwt.verify(token, 'temporary-secret');
+const verify = async (token) => {
+  const tokenInDB = await Token.findOne({ where: { token } });
+  const userId = tokenInDB.userId;
+  return { id: userId };
 };
 
 module.exports = {
