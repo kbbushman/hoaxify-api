@@ -23,7 +23,7 @@ const login = async (req, res, next) => {
       throw new ForbiddenException();
     }
 
-    const token = tokenService.createToken(user);
+    const token = await tokenService.createToken(user);
 
     return res.send({ id: user.id, username: user.username, token });
   } catch (err) {
