@@ -35,6 +35,10 @@ const postAuthentication = async (credentials, options = {}) => {
   return await agent.send(credentials);
 };
 
+const postLogout = async () => {
+  return const response = await request(app).post('/api/v1/auth/logout').send();
+};
+
 describe('Authentication', () => {
   it('returns 200 when credentials are correct', async () => {
     await addUser();
