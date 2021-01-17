@@ -31,7 +31,13 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
+  const authorization = req.headers.authorization;
+
+  if (authorization) {
+    const token = authorization.substring(7);
+    await tokenService.deleteToken(token);
+  }
   res.send();
 };
 
