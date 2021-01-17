@@ -2,6 +2,7 @@ const request = require('supertest');
 const bcrypt = require('bcrypt');
 const app = require('../src/server');
 const User = require('../src/user/User');
+const Token = require('../src/auth/Token');
 const sequelize = require('../src/config/database');
 const en = require('../locales/en/translation.json');
 const es = require('../locales/es/translation.json');
@@ -35,8 +36,12 @@ const postAuthentication = async (credentials, options = {}) => {
   return await agent.send(credentials);
 };
 
-const postLogout = async () => {
-  return request(app).post('/api/v1/auth/logout').send();
+const postLogout = async (options = {}) => {
+  const agent = request(app).post('/api/v1/auth/logout');
+  if (options.token) {
+    agent.set('Authorization', `Bearer ${options.token}`);
+  }
+  return agent.send();
 };
 
 describe('Authentication', () => {
@@ -176,5 +181,17 @@ describe('Logout', () => {
   it('returns 200 ok when unauthorized request sent for logout', async () => {
     const response = await postLogout();
     expect(response.status).toBe(200);
+  });
+
+  it('removes the token from the database', async () => {
+    await addUser();
+    const response = await postAuthentication({
+      email: 'test@test.com',
+      password: 'P4ssword',
+    });
+    const token = response.body.token;
+    await postLogout({ token });
+    const storedToken = await Token.findOne({ where: { token } });
+    expect(storedToken).toBeNull();
   });
 });
