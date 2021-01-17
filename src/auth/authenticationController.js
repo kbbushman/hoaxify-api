@@ -31,6 +31,11 @@ const login = async (req, res, next) => {
   }
 };
 
+const logout = (req, res) => {
+  res.send();
+};
+
 module.exports = {
   login,
+  logout,
 };
