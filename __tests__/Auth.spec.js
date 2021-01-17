@@ -170,7 +170,7 @@ describe('Authentication', () => {
 
 describe('Logout', () => {
   it('returns 200 ok when unauthorized request sent for logout', async () => {
-    const response = await request(app).post('/api/v1/logout').send();
+    const response = await request(app).post('/api/v1/auth/logout').send();
     expect(response.status).toBe(200);
   });
 });
