@@ -3,7 +3,6 @@ const { check, validationResult } = require('express-validator');
 const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
-const tokenAuthentication = require('../middleware/tokenAuthentication');
 
 const router = express.Router();
 
@@ -51,12 +50,12 @@ router.post(
 
 router.post('/token/:token', userController.activate);
 
-router.get('/', pagination, tokenAuthentication, userController.getUsers);
+router.get('/', pagination, userController.getUsers);
 
 router.get('/:id', userController.getUser);
 
-router.put('/:id', tokenAuthentication, userController.update);
+router.put('/:id', userController.update);
 
-router.delete('/:id', tokenAuthentication, userController.deleteUser);
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;
