@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt');
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
-// const en = require('../locales/en/translation.json');
-// const es = require('../locales/es/translation.json');
+const en = require('../locales/en/translation.json');
+const es = require('../locales/es/translation.json');
 
 beforeAll(async () => {
   await sequelize.sync();
@@ -53,20 +53,20 @@ describe('User Delete', () => {
     expect(response.status).toBe(403);
   });
 
-  // it.each`
-  //   language | message
-  //   ${'es'}  | ${es.unauthorized_user_update}
-  //   ${'en'}  | ${en.unauthorized_user_update}
-  // `(
-  //   'returns error body with $message for unauthorized request when language is set to $language',
-  //   async ({ language, message }) => {
-  //     const nowInMillis = new Date().getTime();
-  //     const response = await updateUser(5, null, { language });
-  //     expect(response.body.path).toBe('/api/v1/users/5');
-  //     expect(response.body.timestamp).toBeGreaterThan(nowInMillis);
-  //     expect(response.body.message).toBe(message);
-  //   }
-  // );
+  it.each`
+    language | message
+    ${'es'}  | ${es.unauthorized_user_delete}
+    ${'en'}  | ${en.unauthorized_user_delete}
+  `(
+    'returns error body with $message for unauthorized request when language is set to $language',
+    async ({ language, message }) => {
+      const nowInMillis = new Date().getTime();
+      const response = await deleteUser(5, { language });
+      expect(response.body.path).toBe('/api/v1/users/5');
+      expect(response.body.timestamp).toBeGreaterThan(nowInMillis);
+      expect(response.body.message).toBe(message);
+    }
+  );
 
   // it('returns forbidden when request sent with incorrect email in basic authorization', async () => {
   //   await addUser();
