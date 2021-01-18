@@ -87,14 +87,14 @@ describe('User Delete', () => {
     expect(response.status).toBe(403);
   });
 
-  // it('returns 200 ok when valid update request sent from authorized user', async () => {
-  //   const savedUser = await addUser();
-  //   const validUpdate = { username: 'test1-updated' };
-  //   const response = await updateUser(savedUser.id, validUpdate, {
-  //     auth: { email: savedUser.email, password: 'P4ssword' },
-  //   });
-  //   expect(response.status).toBe(200);
-  // });
+  it('returns 200 ok when valid delete request sent from authorized user', async () => {
+    const savedUser = await addUser();
+    const token = await auth({
+      auth: { email: 'test1@gmail.com', password: 'Passwrod' },
+    });
+    const response = await deleteUser(savedUser.id, { token });
+    expect(response.status).toBe(200);
+  });
 
   // it('updates username in databse when valid update request sent from authorized user', async () => {
   //   const savedUser = await addUser();
