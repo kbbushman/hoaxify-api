@@ -90,7 +90,7 @@ describe('User Delete', () => {
   it('returns 200 ok when valid delete request sent from authorized user', async () => {
     const savedUser = await addUser();
     const token = await auth({
-      auth: { email: 'test1@gmail.com', password: 'Passwrod' },
+      auth: { email: 'test@test.com', password: 'P4ssword' },
     });
     const response = await deleteUser(savedUser.id, { token });
     expect(response.status).toBe(200);
