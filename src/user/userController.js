@@ -110,7 +110,7 @@ const update = async (req, res, next) => {
 };
 
 const deleteUser = (req, res) => {
-  res.sendStatus(403);
+  throw new ForbiddenException('unauthorized_user_delete');
 };
 
 const findByEmail = async (email) => {
