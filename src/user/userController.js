@@ -8,6 +8,7 @@ const InvalidTokenException = require('./InvalidTokenException');
 const UserNotFoundException = require('./UserNotFoundException');
 const ForbiddenException = require('../error/ForbiddenException');
 const { randomString } = require('../shared/generator');
+const tokenService = require('../auth/tokenService');
 
 const create = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -111,14 +112,15 @@ const update = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   const authenticatedUser = req.authenticatedUser;
+  if (!authenticatedUser || authenticatedUser.id.toString() !== req.params.id) {
+    return next(new ForbiddenException('unauthorized_user_delete'));
+  }
+
   try {
-    if (
-      !authenticatedUser ||
-      authenticatedUser.id.toString() !== req.params.id
-    ) {
-      throw new ForbiddenException('unauthorized_user_delete');
-    }
+    const authorization = req.headers.authorization;
+    const token = authorization.substring(7);
     await User.destroy({ where: { id: authenticatedUser.id } });
+    await tokenService.deleteToken(token);
     res.sendStatus(200);
   } catch (err) {
     next(err);
