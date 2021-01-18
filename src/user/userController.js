@@ -110,7 +110,11 @@ const update = async (req, res, next) => {
 };
 
 const deleteUser = (req, res) => {
-  throw new ForbiddenException('unauthorized_user_delete');
+  const authenticatedUser = req.authenticatedUser;
+  if (!authenticatedUser || authenticatedUser.id.toString() !== req.params.id) {
+    throw new ForbiddenException('unauthorized_user_delete');
+  }
+  res.send();
 };
 
 const findByEmail = async (email) => {
