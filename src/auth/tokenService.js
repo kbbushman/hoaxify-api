@@ -34,15 +34,17 @@ const deleteToken = async (token) => {
   await Token.destroy({ where: { token } });
 };
 
-const scheduleCleanup = async () => {
-  const oneWeekAgo = new Date(Date.now() - ONE_WEEK_IN_MILLIS);
-  await Token.destroy({
-    where: {
-      lastUsedAt: {
-        [Sequelize.Op.lt]: oneWeekAgo,
+const scheduleCleanup = () => {
+  setInterval(async () => {
+    const oneWeekAgo = new Date(Date.now() - ONE_WEEK_IN_MILLIS);
+    await Token.destroy({
+      where: {
+        lastUsedAt: {
+          [Sequelize.Op.lt]: oneWeekAgo,
+        },
       },
-    },
-  });
+    });
+  }, 1000);
 };
 
 module.exports = {
