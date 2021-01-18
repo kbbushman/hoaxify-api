@@ -195,3 +195,29 @@ describe('Logout', () => {
     expect(storedToken).toBeNull();
   });
 });
+
+describe('Token Expiration', () => {
+  const updateUser = async (id = 5, body = null, options = {}) => {
+    let agent = request(app).put(`/api/v1/users/${id}`);
+
+    if (options.token) {
+      agent.set('Authorization', `Bearer ${options.token}`);
+    }
+
+    return agent.send(body);
+  };
+
+  it('returns 403 when token is older than 1 week', async () => {
+    const savedUser = await addUser();
+    const token = 'test-token';
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000 - 1);
+    await Token.create({
+      token,
+      userId: savedUser.id,
+      lastUsedAt: oneWeekAgo,
+    });
+    const validUpdate = { username: 'user1-updated' };
+    const response = await updateUser(savedUser.id, validUpdate, { token });
+    expect(response.status).toBe(403);
+  });
+});
