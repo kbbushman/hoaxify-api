@@ -96,13 +96,14 @@ describe('User Delete', () => {
     expect(response.status).toBe(200);
   });
 
-  // it('updates username in databse when valid update request sent from authorized user', async () => {
-  //   const savedUser = await addUser();
-  //   const validUpdate = { username: 'test1-updated' };
-  //   await updateUser(savedUser.id, validUpdate, {
-  //     auth: { email: savedUser.email, password: 'P4ssword' },
-  //   });
-  //   const inDBUser = await User.findOne({ where: { id: savedUser.id } });
-  //   expect(inDBUser.username).toBe(validUpdate.username);
-  // });
+  it('deletes user from databse when request sent from authorized user', async () => {
+    const savedUser = await addUser();
+    const token = await auth({
+      auth: { email: 'test@test.com', password: 'P4ssword' },
+    });
+    await deleteUser(savedUser.id, { token });
+
+    const inDBUser = await User.findOne({ where: { id: savedUser.id } });
+    expect(inDBUser).toBeNull();
+  });
 });
