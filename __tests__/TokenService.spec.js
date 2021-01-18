@@ -11,7 +11,8 @@ beforeEach(async () => {
 });
 
 describe('Scheduled Token Cleanup', () => {
-  it('clears the expired token with scheduled task', async (done) => {
+  it('clears the expired token with scheduled task', async () => {
+    jest.useFakeTimers();
     const token = 'test-token';
     const eightDaysAgo = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000);
     await Token.create({
@@ -19,10 +20,8 @@ describe('Scheduled Token Cleanup', () => {
       lastUsedAt: eightDaysAgo,
     });
     tokenService.scheduleCleanup();
-    setTimeout(async () => {
-      const tokenInDB = await Token.findOne({ where: { token } });
-      expect(tokenInDB).toBeNull();
-      done();
-    }, 2000);
+    jest.advanceTimersByTime(60 * 60 * 1000 + 5000);
+    const tokenInDB = await Token.findOne({ where: { token } });
+    expect(tokenInDB).toBeNull();
   });
 });
