@@ -68,34 +68,19 @@ describe('User Delete', () => {
     }
   );
 
-  // it('returns forbidden when request sent with incorrect email in basic authorization', async () => {
-  //   await addUser();
-  //   const response = await updateUser(5, null, {
-  //     auth: { email: 'test1000@gmail.com', password: 'P4sswrod' },
-  //   });
-  //   expect(response.status).toBe(403);
-  // });
-
-  // it('returns forbidden when request sent with incorrect password in basic authorization', async () => {
-  //   await addUser();
-  //   const response = await updateUser(5, null, {
-  //     auth: { email: 'test1@gmail.com', password: 'Passwrod' },
-  //   });
-  //   expect(response.status).toBe(403);
-  // });
-
-  // it('returns forbidden when update request is sent with correct credentials for different user', async () => {
-  //   await addUser();
-  //   const userToBeUpdated = await addUser({
-  //     ...activeUser,
-  //     username: 'use2',
-  //     email: 'user2@gmail.com',
-  //   });
-  //   const response = await updateUser(userToBeUpdated.id, null, {
-  //     auth: { email: 'test1@gmail.com', password: 'Passwrod' },
-  //   });
-  //   expect(response.status).toBe(403);
-  // });
+  it('returns forbidden when delete request is sent with correct credentials for different user', async () => {
+    await addUser();
+    const userToBeDeleted = await addUser({
+      ...activeUser,
+      username: 'use2',
+      email: 'user2@gmail.com',
+    });
+    const token = await auth({
+      auth: { email: 'test1@gmail.com', password: 'Passwrod' },
+    });
+    const response = await deleteUser(userToBeDeleted.id, { token });
+    expect(response.status).toBe(403);
+  });
 
   // it('returns forbidden when update request is sent by inactive user with correct credentials', async () => {
   //   const inactiveUser = await addUser({ ...activeUser, inactive: true });
