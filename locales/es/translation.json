@@ -15,5 +15,6 @@
   "user_not_found": "Usuario no encontrado",
   "authentication_failure": "Credenciales incorrectas",
   "inactive_authentication_failure": "Cuenta inactiva",
-  "unauthorized_user_update": "No tienes autorización para actualizar al usuario"
+  "unauthorized_user_update": "No tienes autorización para actualizar al usuario",
+  "unauthorized_user_delete": "No estás autorizado para eliminar usuario"
 }
