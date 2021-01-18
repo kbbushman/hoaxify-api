@@ -93,17 +93,14 @@ const getUser = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   const authenticatedUser = req.authenticatedUser;
+  if (!authenticatedUser || authenticatedUser.id.toString() !== req.params.id) {
+    return next(new ForbiddenException('unauthorized_user_update'));
+  }
+
   try {
-    if (
-      !authenticatedUser ||
-      authenticatedUser.id.toString() !== req.params.id
-    ) {
-      throw new ForbiddenException('unauthorized_user_update');
-    }
     const user = await User.findOne({ where: { id: req.params.id } });
     user.username = req.body.username;
     await user.save();
-
     return res.send();
   } catch (err) {
     next(err);
