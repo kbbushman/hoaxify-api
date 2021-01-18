@@ -44,7 +44,7 @@ const scheduleCleanup = () => {
         },
       },
     });
-  }, 1000);
+  }, 60 * 60 * 1000); // 1 hour
 };
 
 module.exports = {
