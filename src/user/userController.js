@@ -109,6 +109,10 @@ const update = async (req, res, next) => {
   }
 };
 
+const deleteUser = (req, res) => {
+  res.sendStatus(403);
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
@@ -120,4 +124,5 @@ module.exports = {
   getUsers,
   getUser,
   update,
+  deleteUser,
 };
