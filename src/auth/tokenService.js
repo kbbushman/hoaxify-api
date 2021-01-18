@@ -7,6 +7,7 @@ const createToken = async (user) => {
   await Token.create({
     token,
     userId: user.id,
+    lastUsedAt: new Date(),
   });
   return token;
 };
