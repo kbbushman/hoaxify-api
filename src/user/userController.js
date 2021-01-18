@@ -114,10 +114,8 @@ const deleteUser = async (req, res, next) => {
   }
 
   try {
-    const authorization = req.headers.authorization;
-    const token = authorization.substring(7);
     await User.destroy({ where: { id: authenticatedUser.id } });
-    await tokenService.deleteToken(token);
+    await tokenService.deleteUserTokens(authenticatedUser.id);
     res.sendStatus(200);
   } catch (err) {
     next(err);
