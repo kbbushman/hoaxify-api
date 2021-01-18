@@ -57,4 +57,6 @@ router.get('/:id', userController.getUser);
 
 router.put('/:id', tokenAuthentication, userController.update);
 
+router.delete('/:id', userController.deleteUser);
+
 module.exports = router;
