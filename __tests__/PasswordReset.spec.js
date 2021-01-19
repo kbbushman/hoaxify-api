@@ -31,4 +31,17 @@ describe('Password Reset Request', () => {
       expect(response.body.message).toBe(message);
     }
   );
+
+  it.each`
+    language | message
+    ${'es'}  | ${es.email_invalid}
+    ${'en'}  | ${en.email_invalid}
+  `(
+    'returns 400 with validation error $message when request does not have a valid email and language is set to $language',
+    async ({ language, message }) => {
+      const response = await postPasswordReset(null, { language });
+      expect(response.body.validationErrors.email).toBe(message);
+      expect(response.status).toBe(400);
+    }
+  );
 });
