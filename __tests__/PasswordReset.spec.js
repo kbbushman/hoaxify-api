@@ -74,4 +74,17 @@ describe('Password Reset Request', () => {
     const response = await postPasswordReset(user.enail);
     expect(response.status).toBe(200);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${es.password_reset_request_success}
+    ${'en'}  | ${en.password_reset_request_success}
+  `(
+    'returns success response body with $message for known email password reset request when language is set to $language',
+    async ({ language, message }) => {
+      const user = await addUser();
+      const response = await postPasswordReset(user.enail, { language });
+      expect(response.body.message).toBe(message);
+    }
+  );
 });
