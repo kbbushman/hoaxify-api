@@ -58,6 +58,11 @@ router.put('/:id', userController.update);
 
 router.delete('/:id', userController.deleteUser);
 
-router.post('/password-reset', userController.passwordReset);
+router.post(
+  '/password-reset',
+  check('email').isEmail().withMessage('email_invalid'),
+  validateRequest,
+  userController.passwordReset
+);
 
 module.exports = router;
