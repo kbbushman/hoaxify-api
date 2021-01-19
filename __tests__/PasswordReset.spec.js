@@ -71,7 +71,7 @@ describe('Password Reset Request', () => {
 
   it('returns 200 ok when a password reset request is sent for known email', async () => {
     const user = await addUser();
-    const response = await postPasswordReset(user.enail);
+    const response = await postPasswordReset(user.email);
     expect(response.status).toBe(200);
   });
 
@@ -83,14 +83,14 @@ describe('Password Reset Request', () => {
     'returns success response body with $message for known email password reset request when language is set to $language',
     async ({ language, message }) => {
       const user = await addUser();
-      const response = await postPasswordReset(user.enail, { language });
+      const response = await postPasswordReset(user.email, { language });
       expect(response.body.message).toBe(message);
     }
   );
 
   it('creates passwordResetToken when a password reset request is sent for a know email', async () => {
     const user = await addUser();
-    await postPasswordReset(user.enail);
+    await postPasswordReset(user.email);
     const userInDB = await User.findOne({ where: { email: user.email } });
     expect(userInDB.passwordResetToken).toBeTruthy();
   });
