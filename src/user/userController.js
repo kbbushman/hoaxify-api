@@ -126,7 +126,9 @@ const passwordReset = async (req, res, next) => {
     if (!user) {
       throw new NotFoundException('email_not_in_use');
     }
-    return res.send({ message: req.t('password_reset_request_success') });
+    user.passwordResetToken = randomString(16);
+    await user.save();
+    res.send({ message: req.t('password_reset_request_success') });
   } catch (err) {
     next(err);
   }
