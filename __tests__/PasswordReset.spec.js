@@ -68,4 +68,10 @@ describe('Password Reset Request', () => {
       expect(response.status).toBe(400);
     }
   );
+
+  it('returns 200 ok when a password reset request is sent for known email', async () => {
+    const user = await addUser();
+    const response = await postPasswordReset(user.enail);
+    expect(response.status).toBe(200);
+  });
 });
