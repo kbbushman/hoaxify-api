@@ -7,6 +7,7 @@ const EmailException = require('../email/EmailException');
 const InvalidTokenException = require('./InvalidTokenException');
 const UserNotFoundException = require('./UserNotFoundException');
 const ForbiddenException = require('../error/ForbiddenException');
+const NotFoundException = require('../error/NotFoundException');
 const { randomString } = require('../shared/generator');
 
 const create = async (req, res, next) => {
@@ -120,6 +121,10 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const passwordReset = (req, res) => {
+  throw new NotFoundException('email_not_in_use');
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
@@ -132,4 +137,5 @@ module.exports = {
   getUser,
   update,
   deleteUser,
+  passwordReset,
 };
