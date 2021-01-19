@@ -17,5 +17,6 @@
   "inactive_authentication_failure": "Cuenta inactiva",
   "unauthorized_user_update": "No tienes autorización para actualizar al usuario",
   "unauthorized_user_delete": "No estás autorizado para eliminar usuario",
-  "email_not_in_use": "El correo electrónico no encontrado"
+  "email_not_in_use": "El correo electrónico no encontrado",
+  "password_reset_request_success": "Verifique su correo electrónico para el enlace de restablecimiento de contraseña"
 }
