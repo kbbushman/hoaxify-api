@@ -16,5 +16,6 @@
   "authentication_failure": "Credenciales incorrectas",
   "inactive_authentication_failure": "Cuenta inactiva",
   "unauthorized_user_update": "No tienes autorización para actualizar al usuario",
-  "unauthorized_user_delete": "No estás autorizado para eliminar usuario"
+  "unauthorized_user_delete": "No estás autorizado para eliminar usuario",
+  "email_not_in_use": "El correo electrónico no encontrado"
 }
