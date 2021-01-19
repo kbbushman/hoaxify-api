@@ -20,10 +20,10 @@ describe('Password Reset Request', () => {
     async ({ language, message }) => {
       const nowInMillis = new Date().getTime();
       const response = await request(app)
-        .post('/api/v1/password-reset')
+        .post('/api/v1/users/password-reset')
         .set('Accept-Language', language)
         .send({ email: 'user1@test.com' });
-      expect(response.body.path).toBe('/api/v1/password-reset');
+      expect(response.body.path).toBe('/api/v1/users/password-reset');
       expect(response.body.timestamp).toBeGreaterThan(nowInMillis);
       expect(response.body.message).toBe(message);
     }
