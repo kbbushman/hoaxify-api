@@ -120,8 +120,16 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const passwordReset = (req, res) => {
-  throw new NotFoundException('email_not_in_use');
+const passwordReset = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { email: req.body.email } });
+    if (!user) {
+      throw new NotFoundException('email_not_in_use');
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
 };
 
 const findByEmail = async (email) => {
