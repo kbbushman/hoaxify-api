@@ -126,7 +126,7 @@ const passwordReset = async (req, res, next) => {
     if (!user) {
       throw new NotFoundException('email_not_in_use');
     }
-    res.sendStatus(200);
+    return res.send({ message: req.t('password_reset_request_success') });
   } catch (err) {
     next(err);
   }
