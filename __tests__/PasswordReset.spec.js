@@ -125,4 +125,13 @@ describe('Password Reset Request', () => {
     const userInDB = await User.findOne({ where: { email: user.email } });
     expect(userInDB.passwordResetToken).toBeTruthy();
   });
+
+  it('sends a password reset email with passwordResetToken', async () => {
+    const user = await addUser();
+    await postPasswordReset(user.email);
+    const userInDB = await User.findOne({ where: { email: user.email } });
+    const passwordResetToken = userInDB.passwordResetToken;
+    expect(lastMail).toContain('test@test.com');
+    expect(lastMail).toContain(passwordResetToken);
+  });
 });
