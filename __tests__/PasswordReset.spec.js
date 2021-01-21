@@ -1,17 +1,48 @@
 const request = require('supertest');
 const bcrypt = require('bcrypt');
+const SMTPServer = require('smtp-server').SMTPServer;
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
 const en = require('../locales/en/translation.json');
 const es = require('../locales/es/translation.json');
 
+let lastMail, server;
+let simulateSmtpFailure = false;
+
 beforeAll(async () => {
+  server = new SMTPServer({
+    authOptional: true,
+    onData(stream, session, callback) {
+      let mailBody;
+      stream.on('data', (data) => {
+        mailBody += data.toString();
+      });
+      stream.on('end', () => {
+        if (simulateSmtpFailure) {
+          const err = new Error('Invalid mailbox');
+          err.responseCode = 553;
+          return callback(err);
+        }
+        lastMail = mailBody;
+        callback();
+      });
+    },
+  });
+
+  await server.listen(8587, 'localhost');
   await sequelize.sync();
+  jest.setTimeout(20000);
 });
 
 beforeEach(async () => {
+  simulateSmtpFailure = false;
   await User.destroy({ truncate: { cascade: true } });
+});
+
+afterAll(async () => {
+  await server.close();
+  jest.setTimeout(5000);
 });
 
 const activeUser = {
