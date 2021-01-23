@@ -1,6 +1,7 @@
 const request = require('supertest');
 const bcrypt = require('bcrypt');
 const SMTPServer = require('smtp-server').SMTPServer;
+const config = require('config');
 const app = require('../src/server');
 const User = require('../src/user/User');
 const sequelize = require('../src/config/database');
@@ -30,7 +31,7 @@ beforeAll(async () => {
     },
   });
 
-  await server.listen(8587, 'localhost');
+  await server.listen(config.mail.port, 'localhost');
   await sequelize.sync();
   jest.setTimeout(20000);
 });
