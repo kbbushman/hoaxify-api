@@ -45,9 +45,7 @@ const sendPasswordReset = async (email, token) => {
     `,
   });
   if (process.env.NODE_ENV === 'development') {
-    console.log(
-      `ACCOUNT ACTIVATION URL: ${nodemailer.getTestMessageUrl(info)}`
-    );
+    console.log(`PASSWORD RESERT URL: ${nodemailer.getTestMessageUrl(info)}`);
   }
 };
 
