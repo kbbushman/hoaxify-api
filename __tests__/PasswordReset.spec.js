@@ -82,7 +82,7 @@ describe('Password Reset Request', () => {
     async ({ language, message }) => {
       const nowInMillis = new Date().getTime();
       const response = await postPasswordReset('test@test.com', { language });
-      expect(response.body.path).toBe('/api/v1/users/password-reset');
+      expect(response.body.path).toBe('/api/v1/users/password');
       expect(response.body.timestamp).toBeGreaterThan(nowInMillis);
       expect(response.body.message).toBe(message);
     }
