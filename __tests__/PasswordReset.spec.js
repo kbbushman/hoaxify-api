@@ -157,3 +157,13 @@ describe('Password Reset Request', () => {
     }
   );
 });
+
+describe('Password Update', () => {
+  it('returns 403 when password update request does not have a valid password reset token', async () => {
+    const response = await request(app).put('/api/v1/users/password').send({
+      password: 'P4ssword',
+      passwordResetToken: 'abcd',
+    });
+    expect(response.status).toBe(403);
+  });
+});
