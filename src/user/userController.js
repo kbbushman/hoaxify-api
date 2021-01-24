@@ -135,6 +135,10 @@ const passwordReset = async (req, res, next) => {
   }
 };
 
+const passwordUpdate = (req, res) => {
+  res.sendStatus(403);
+};
+
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
@@ -148,4 +152,5 @@ module.exports = {
   update,
   deleteUser,
   passwordReset,
+  passwordUpdate,
 };
