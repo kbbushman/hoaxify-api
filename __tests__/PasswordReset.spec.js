@@ -60,7 +60,7 @@ const addUser = async (user = { ...activeUser }) => {
 };
 
 const postPasswordReset = (email = 'test@test.com', options = {}) => {
-  const agent = request(app).post('/api/v1/users/password-reset');
+  const agent = request(app).post('/api/v1/users/password');
   if (options.language) {
     agent.set('Accept-Language', options.language);
   }
