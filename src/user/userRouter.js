@@ -50,6 +50,15 @@ router.post(
 
 router.post('/token/:token', userController.activate);
 
+router.post(
+  '/password',
+  check('email').isEmail().withMessage('email_invalid'),
+  validateRequest,
+  userController.passwordReset
+);
+
+router.put('/password', userController.passwordUpdate);
+
 router.get('/', pagination, userController.getUsers);
 
 router.get('/:id', userController.getUser);
@@ -57,12 +66,5 @@ router.get('/:id', userController.getUser);
 router.put('/:id', userController.update);
 
 router.delete('/:id', userController.deleteUser);
-
-router.post(
-  '/password',
-  check('email').isEmail().withMessage('email_invalid'),
-  validateRequest,
-  userController.passwordReset
-);
 
 module.exports = router;
