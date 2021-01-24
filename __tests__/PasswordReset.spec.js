@@ -142,4 +142,18 @@ describe('Password Reset Request', () => {
     const response = await postPasswordReset(user.email);
     expect(response.status).toBe(502);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${es.email_failure}
+    ${'en'}  | ${en.email_failure}
+  `(
+    'returns $message when language is set to $language after email failure',
+    async ({ language, message }) => {
+      simulateSmtpFailure = true;
+      const user = await addUser();
+      const response = await postPasswordReset(user.email, { language });
+      expect(response.body.message).toBe(message);
+    }
+  );
 });
