@@ -67,6 +67,14 @@ const postPasswordReset = (email = 'test@test.com', options = {}) => {
   return agent.send({ email });
 };
 
+const putPasswordUpdate = (body = {}, options = {}) => {
+  const agent = request(app).put('/api/v1/users/password');
+  if (options.language) {
+    agent.set('Accept-Language', options.language);
+  }
+  return agent.send(body);
+};
+
 describe('Password Reset Request', () => {
   it('returns 404 when a password reset request is sent for unknown email', async () => {
     const response = await postPasswordReset();
@@ -160,7 +168,7 @@ describe('Password Reset Request', () => {
 
 describe('Password Update', () => {
   it('returns 403 when password update request does not have a valid password reset token', async () => {
-    const response = await request(app).put('/api/v1/users/password').send({
+    const response = await putPasswordUpdate({
       password: 'P4ssword',
       passwordResetToken: 'abcd',
     });
