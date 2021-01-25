@@ -30,6 +30,9 @@ User.init(
     passwordResetToken: {
       type: Sequelize.STRING,
     },
+    image: {
+      type: Sequelize.STRING,
+    },
   },
   {
     sequelize, // Sequelize instance
