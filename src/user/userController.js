@@ -136,7 +136,7 @@ const passwordReset = async (req, res, next) => {
 };
 
 const passwordUpdate = (req, res) => {
-  throw new ForbiddenException('unauthorized_password_reset');
+  res.sendStatus(200);
 };
 
 const findByEmail = async (email) => {
