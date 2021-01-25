@@ -7,6 +7,7 @@ const EmailException = require('../email/EmailException');
 const InvalidTokenException = require('./InvalidTokenException');
 const ForbiddenException = require('../error/ForbiddenException');
 const NotFoundException = require('../error/NotFoundException');
+const fileService = require('../file/fileService');
 const { clearTokens } = require('../auth/tokenService');
 const { randomString } = require('../shared/generator');
 
@@ -100,7 +101,9 @@ const update = async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.params.id } });
     user.username = req.body.username;
-    user.image = req.body.image;
+    req.body.image
+      ? (user.image = fileService.saveProfileImage(req.body.image))
+      : null;
     await user.save();
     return res.send({
       id: user.id,
