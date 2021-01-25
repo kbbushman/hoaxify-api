@@ -9,3 +9,7 @@
 .env.production
 
 node_modules/
+
+upload/
+uploads-dev/
+uploads-test/
