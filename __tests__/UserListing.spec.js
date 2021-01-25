@@ -71,11 +71,11 @@ describe('Listing Users', () => {
     expect(response.body.content.length).toBe(6);
   });
 
-  it('returns id, username, and email only in content array for each user', async () => {
+  it('returns id, username, email, and image only in content array for each user', async () => {
     await addUsers(6, 5);
     const response = await getUsers();
     const user = response.body.content[0];
-    expect(Object.keys(user)).toEqual(['id', 'username', 'email']);
+    expect(Object.keys(user)).toEqual(['id', 'username', 'email', 'image']);
   });
 
   it('returns 2 as totalPages when there are 15 active users and 7 inactive users', async () => {
