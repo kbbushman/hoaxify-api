@@ -249,4 +249,15 @@ describe('Password Update', () => {
       expect(response.body.validationErrors.password).toBe(message);
     }
   );
+
+  it('returns 200 when valid password is sent with valid reset token', async () => {
+    const user = await addUser();
+    user.passwordResetToken = 'test-token';
+    await user.save();
+    const response = await putPasswordUpdate({
+      password: 'N3w-password',
+      passwordResetToken: 'test-token',
+    });
+    expect(response.status).toBe(200);
+  });
 });
