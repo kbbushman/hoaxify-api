@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator');
 const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
 const pagination = require('../middleware/pagination');
+const User = require('./User');
 
 const router = express.Router();
 
@@ -57,7 +58,29 @@ router.post(
   userController.passwordReset
 );
 
-router.put('/password', userController.passwordUpdate);
+router.put(
+  '/password',
+  check('password')
+    .notEmpty()
+    .withMessage('password_null')
+    .bail()
+    .isLength({ min: 6 })
+    .withMessage('password_length')
+    .bail()
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
+    .withMessage('password_pattern'),
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    const user = await User.findOne({
+      where: { passwordResetToken: req.body.passwordResetToken },
+    });
+    if (!errors.isEmpty() && user) {
+      return res.sendStatus(400);
+    }
+    next();
+  },
+  userController.passwordUpdate
+);
 
 router.get('/', pagination, userController.getUsers);
 
