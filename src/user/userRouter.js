@@ -75,7 +75,7 @@ router.put(
       where: { passwordResetToken: req.body.passwordResetToken },
     });
     if (!errors.isEmpty() && user) {
-      return res.sendStatus(400);
+      return next(new ValidationException(errors.array()));
     }
     next();
   },
