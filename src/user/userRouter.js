@@ -16,6 +16,16 @@ const validateRequest = (req, res, next) => {
   next();
 };
 
+const passwordResetTokenValidator = async (req, res, next) => {
+  const user = await User.findOne({
+    where: { passwordResetToken: req.body.passwordResetToken },
+  });
+  if (!user) {
+    return next(new ForbiddenException('unauthorized_password_reset'));
+  }
+  next();
+};
+
 router.post(
   '/',
   check('username')
@@ -61,15 +71,7 @@ router.post(
 
 router.put(
   '/password',
-  async (req, res, next) => {
-    const user = await User.findOne({
-      where: { passwordResetToken: req.body.passwordResetToken },
-    });
-    if (!user) {
-      return next(new ForbiddenException('unauthorized_password_reset'));
-    }
-    next();
-  },
+  passwordResetTokenValidator,
   check('password')
     .notEmpty()
     .withMessage('password_null')
