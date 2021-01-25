@@ -179,14 +179,19 @@ describe('Get User', () => {
     expect(response.status).toBe(200);
   });
 
-  it('returns id, username, and email in response body when an active user exists', async () => {
+  it('returns id, username, email, and image in response body when an active user exists', async () => {
     const user = await User.create({
       username: 'test1',
       email: 'test1@test.com',
       inactive: false,
     });
     const response = await getUser(user.id);
-    expect(Object.keys(response.body)).toEqual(['id', 'username', 'email']);
+    expect(Object.keys(response.body)).toEqual([
+      'id',
+      'username',
+      'email',
+      'image',
+    ]);
   });
 
   it('returns 404 when the user is inactive', async () => {
