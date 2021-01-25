@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const request = require('supertest');
 const bcrypt = require('bcrypt');
 const app = require('../src/server');
@@ -133,5 +135,17 @@ describe('User Update', () => {
   it('returns 403 when token is not valid', async () => {
     const response = await updateUser(5, null, { token: '123' });
     expect(response.status).toBe(403);
+  });
+
+  it('saves the user image when update contains image in base64 encoding', async () => {
+    const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
+    const fileInBase64 = fs.readFileSync(filePath, { encoding: 'base64' });
+    const savedUser = await addUser();
+    const validUpdate = { username: 'test1-updated', image: fileInBase64 };
+    await updateUser(savedUser.id, validUpdate, {
+      auth: { email: savedUser.email, password: 'P4ssword' },
+    });
+    const inDBUser = await User.findOne({ where: { id: savedUser.id } });
+    expect(inDBUser.image).toBeTruthy();
   });
 });
