@@ -102,7 +102,12 @@ const update = async (req, res, next) => {
     user.username = req.body.username;
     user.image = req.body.image;
     await user.save();
-    return res.send();
+    return res.send({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      image: user.image,
+    });
   } catch (err) {
     next(err);
   }
