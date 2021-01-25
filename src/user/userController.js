@@ -102,7 +102,7 @@ const update = async (req, res, next) => {
     const user = await User.findOne({ where: { id: req.params.id } });
     user.username = req.body.username;
     req.body.image
-      ? (user.image = fileService.saveProfileImage(req.body.image))
+      ? (user.image = await fileService.saveProfileImage(req.body.image))
       : null;
     await user.save();
     return res.send({
