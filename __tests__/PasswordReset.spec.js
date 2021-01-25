@@ -284,4 +284,19 @@ describe('Password Update', () => {
     const userInDB = await User.findOne({ where: { email: 'test@test.com' } });
     expect(userInDB.passwordResetToken).toBeFalsy();
   });
+
+  it('activates and clears activation token if the account is inactive after valid password reset', async () => {
+    const user = await addUser();
+    user.passwordResetToken = 'test-token';
+    user.activationToken = 'activation-token';
+    user.inactive = true;
+    await user.save();
+    await putPasswordUpdate({
+      password: 'N3w-password',
+      passwordResetToken: 'test-token',
+    });
+    const userInDB = await User.findOne({ where: { email: 'test@test.com' } });
+    expect(userInDB.activationToken).toBeFalsy();
+    expect(userInDB.inactive).toBe(false);
+  });
 });
