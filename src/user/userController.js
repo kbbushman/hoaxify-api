@@ -63,7 +63,7 @@ const getUsers = async (req, res) => {
         [Sequelize.Op.not]: authenticatedUser ? authenticatedUser.id : 0,
       },
     },
-    attributes: ['id', 'username', 'email'],
+    attributes: ['id', 'username', 'email', 'image'],
     limit: size,
     offset: page * size,
   });
