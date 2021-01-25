@@ -80,7 +80,7 @@ const getUser = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: { id: req.params.id, inactive: false },
-      attributes: ['id', 'username', 'email'],
+      attributes: ['id', 'username', 'email', 'image'],
     });
     if (!user) {
       throw new NotFoundException('user_not_found');
