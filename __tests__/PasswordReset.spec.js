@@ -203,4 +203,15 @@ describe('Password Update', () => {
     });
     expect(response.status).toBe(403);
   });
+
+  it('returns 400 when trying to update with invalid password and the reset token is valid', async () => {
+    const user = await addUser();
+    user.passwordResetToken = 'test-token';
+    await user.save();
+    const response = await putPasswordUpdate({
+      password: 'not-valid',
+      passwordResetToken: 'test-token',
+    });
+    expect(response.status).toBe(400);
+  });
 });
