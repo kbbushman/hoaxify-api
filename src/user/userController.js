@@ -142,6 +142,8 @@ const passwordUpdate = async (req, res, next) => {
     const hash = await bcrypt.hash(password, 10);
     user.password = hash;
     user.passwordResetToken = null;
+    user.inactive = false;
+    user.activationToken = null;
     await user.save();
     res.sendStatus(200);
   } catch (err) {
