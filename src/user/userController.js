@@ -100,6 +100,7 @@ const update = async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.params.id } });
     user.username = req.body.username;
+    user.image = req.body.image;
     await user.save();
     return res.send();
   } catch (err) {
