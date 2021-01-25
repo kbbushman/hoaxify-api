@@ -135,12 +135,25 @@ const passwordReset = async (req, res, next) => {
   }
 };
 
-const passwordUpdate = (req, res) => {
-  res.sendStatus(200);
+const passwordUpdate = async (req, res, next) => {
+  const { passwordResetToken, password } = req.body;
+  try {
+    const user = await findByPasswordResetToken(passwordResetToken);
+    const hash = await bcrypt.hash(password, 10);
+    user.password = hash;
+    await user.save();
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
 };
 
 const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
+};
+
+const findByPasswordResetToken = (token) => {
+  return User.findOne({ where: { passwordResetToken: token } });
 };
 
 module.exports = {
@@ -153,4 +166,5 @@ module.exports = {
   deleteUser,
   passwordReset,
   passwordUpdate,
+  findByPasswordResetToken,
 };
