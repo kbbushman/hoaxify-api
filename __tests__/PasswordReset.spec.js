@@ -214,4 +214,39 @@ describe('Password Update', () => {
     });
     expect(response.status).toBe(400);
   });
+
+  it.each`
+    language | value              | message
+    ${'en'}  | ${null}            | ${en.password_null}
+    ${'en'}  | ${'passw'}         | ${en.password_length}
+    ${'en'}  | ${'alllowercase'}  | ${en.password_pattern}
+    ${'en'}  | ${'ALLUPPERCASE'}  | ${en.password_pattern}
+    ${'en'}  | ${'123456789'}     | ${en.password_pattern}
+    ${'en'}  | ${'lowerandUPPER'} | ${en.password_pattern}
+    ${'en'}  | ${'lowerand1234'}  | ${en.password_pattern}
+    ${'en'}  | ${'UPPERAND1234'}  | ${en.password_pattern}
+    ${'es'}  | ${null}            | ${es.password_null}
+    ${'es'}  | ${'passw'}         | ${es.password_length}
+    ${'es'}  | ${'alllowercase'}  | ${es.password_pattern}
+    ${'es'}  | ${'ALLUPPERCASE'}  | ${es.password_pattern}
+    ${'es'}  | ${'123456789'}     | ${es.password_pattern}
+    ${'es'}  | ${'lowerandUPPER'} | ${es.password_pattern}
+    ${'es'}  | ${'lowerand1234'}  | ${es.password_pattern}
+    ${'es'}  | ${'UPPERAND1234'}  | ${es.password_pattern}
+  `(
+    'returns password validation error "$message" when language is set to $language and the value is $value',
+    async ({ language, message, value }) => {
+      const user = await addUser();
+      user.passwordResetToken = 'test-token';
+      await user.save();
+      const response = await putPasswordUpdate(
+        {
+          password: value,
+          passwordResetToken: 'test-token',
+        },
+        { language }
+      );
+      expect(response.body.validationErrors.password).toBe(message);
+    }
+  );
 });
