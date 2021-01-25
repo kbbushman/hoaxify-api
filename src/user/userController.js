@@ -7,6 +7,7 @@ const EmailException = require('../email/EmailException');
 const InvalidTokenException = require('./InvalidTokenException');
 const ForbiddenException = require('../error/ForbiddenException');
 const NotFoundException = require('../error/NotFoundException');
+const { clearTokens } = require('../auth/tokenService');
 const { randomString } = require('../shared/generator');
 
 const create = async (req, res, next) => {
@@ -145,6 +146,7 @@ const passwordUpdate = async (req, res, next) => {
     user.inactive = false;
     user.activationToken = null;
     await user.save();
+    await clearTokens(user.id);
     res.sendStatus(200);
   } catch (err) {
     next(err);
