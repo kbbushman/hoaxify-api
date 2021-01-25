@@ -174,4 +174,25 @@ describe('Password Update', () => {
     });
     expect(response.status).toBe(403);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${es.unauthorized_password_reset}
+    ${'en'}  | ${en.unauthorized_password_reset}
+  `(
+    'returns error body with $message when language is set to $language when password reset token is invalid',
+    async ({ language, message }) => {
+      const nowInMillis = new Date().getTime();
+      const response = await putPasswordUpdate(
+        {
+          password: 'P4ssword',
+          passwordResetToken: 'abcd',
+        },
+        { language }
+      );
+      expect(response.body.path).toBe('/api/v1/users/password');
+      expect(response.body.timestamp).toBeGreaterThan(nowInMillis);
+      expect(response.body.message).toBe(message);
+    }
+  );
 });
