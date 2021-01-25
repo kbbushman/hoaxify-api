@@ -9,6 +9,9 @@ const en = require('../locales/en/translation.json');
 const es = require('../locales/es/translation.json');
 const config = require('config');
 
+const { uploadDir, profileDir } = config;
+const profileDirectory = path.join('.', uploadDir, profileDir);
+
 beforeAll(async () => {
   await sequelize.sync();
 });
@@ -18,8 +21,6 @@ beforeEach(async () => {
 });
 
 afterAll(() => {
-  const { uploadDir, profileDir } = config;
-  const profileDirectory = path.join('.', uploadDir, profileDir);
   const files = fs.readdirSync(profileDirectory);
   for (const file of files) {
     fs.unlinkSync(path.join(profileDirectory, file));
@@ -186,13 +187,7 @@ describe('User Update', () => {
       auth: { email: savedUser.email, password: 'P4ssword' },
     });
     const inDBUser = await User.findOne({ where: { id: savedUser.id } });
-    const { uploadDir, profileDir } = config;
-    const profileImagePath = path.join(
-      '.',
-      uploadDir,
-      profileDir,
-      inDBUser.image
-    );
+    const profileImagePath = path.join(profileDirectory, inDBUser.image);
     expect(fs.existsSync(profileImagePath)).toBe(true);
   });
 });
