@@ -2,6 +2,7 @@ const express = require('express');
 const { check, validationResult } = require('express-validator');
 const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
+const ForbiddenException = require('../error/ForbiddenException');
 const pagination = require('../middleware/pagination');
 const User = require('./User');
 
@@ -60,6 +61,15 @@ router.post(
 
 router.put(
   '/password',
+  async (req, res, next) => {
+    const user = await User.findOne({
+      where: { passwordResetToken: req.body.passwordResetToken },
+    });
+    if (!user) {
+      return next(new ForbiddenException('unauthorized_password_reset'));
+    }
+    next();
+  },
   check('password')
     .notEmpty()
     .withMessage('password_null')
@@ -69,16 +79,7 @@ router.put(
     .bail()
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
     .withMessage('password_pattern'),
-  async (req, res, next) => {
-    const errors = validationResult(req);
-    const user = await User.findOne({
-      where: { passwordResetToken: req.body.passwordResetToken },
-    });
-    if (!errors.isEmpty() && user) {
-      return next(new ValidationException(errors.array()));
-    }
-    next();
-  },
+  validateRequest,
   userController.passwordUpdate
 );
 
