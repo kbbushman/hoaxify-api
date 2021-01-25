@@ -148,4 +148,20 @@ describe('User Update', () => {
     const inDBUser = await User.findOne({ where: { id: savedUser.id } });
     expect(inDBUser.image).toBeTruthy();
   });
+
+  it('returns success body with id, username, email and image only', async () => {
+    const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
+    const fileInBase64 = fs.readFileSync(filePath, { encoding: 'base64' });
+    const savedUser = await addUser();
+    const validUpdate = { username: 'test1-updated', image: fileInBase64 };
+    const response = await updateUser(savedUser.id, validUpdate, {
+      auth: { email: savedUser.email, password: 'P4ssword' },
+    });
+    expect(Object.keys(response.body)).toEqual([
+      'id',
+      'username',
+      'email',
+      'image',
+    ]);
+  });
 });
