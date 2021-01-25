@@ -25,7 +25,12 @@ const login = async (req, res, next) => {
 
     const token = await tokenService.createToken(user);
 
-    return res.send({ id: user.id, username: user.username, token });
+    return res.send({
+      id: user.id,
+      username: user.username,
+      image: user.image,
+      token,
+    });
   } catch (err) {
     next(err);
   }
