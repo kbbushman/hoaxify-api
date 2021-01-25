@@ -141,6 +141,7 @@ const passwordUpdate = async (req, res, next) => {
     const user = await findByPasswordResetToken(passwordResetToken);
     const hash = await bcrypt.hash(password, 10);
     user.password = hash;
+    user.passwordResetToken = null;
     await user.save();
     res.sendStatus(200);
   } catch (err) {
