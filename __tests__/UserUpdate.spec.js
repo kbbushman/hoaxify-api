@@ -65,6 +65,11 @@ const updateUser = async (id = 5, body = null, options = {}) => {
   return agent.send(body);
 };
 
+const readFileAsBase64 = () => {
+  const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
+  return fs.readFileSync(filePath, { encoding: 'base64' });
+};
+
 describe('User Update', () => {
   it('returns forbidden when request sent without basic authorization', async () => {
     const response = await updateUser();
@@ -148,8 +153,7 @@ describe('User Update', () => {
   });
 
   it('saves the user image when update contains image in base64 encoding', async () => {
-    const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
-    const fileInBase64 = fs.readFileSync(filePath, { encoding: 'base64' });
+    const fileInBase64 = readFileAsBase64();
     const savedUser = await addUser();
     const validUpdate = { username: 'test1-updated', image: fileInBase64 };
     await updateUser(savedUser.id, validUpdate, {
@@ -160,8 +164,7 @@ describe('User Update', () => {
   });
 
   it('returns success body with id, username, email and image only', async () => {
-    const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
-    const fileInBase64 = fs.readFileSync(filePath, { encoding: 'base64' });
+    const fileInBase64 = readFileAsBase64();
     const savedUser = await addUser();
     const validUpdate = { username: 'test1-updated', image: fileInBase64 };
     const response = await updateUser(savedUser.id, validUpdate, {
@@ -176,8 +179,7 @@ describe('User Update', () => {
   });
 
   it('saves the user image to upload folder and stores filename in user when request has image', async () => {
-    const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
-    const fileInBase64 = fs.readFileSync(filePath, { encoding: 'base64' });
+    const fileInBase64 = readFileAsBase64();
     const savedUser = await addUser();
     const validUpdate = { username: 'test1-updated', image: fileInBase64 };
     await updateUser(savedUser.id, validUpdate, {
