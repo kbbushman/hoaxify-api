@@ -7,6 +7,7 @@
     "start": "cross-env NODE_ENV=development nodemon index.js",
     "dev": "nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --watch",
+    "posttest": "cross-env NODE_ENV=test node testCleanup.js",
     "lint": "eslint ."
   },
   "author": "Kenneth Bushman",
