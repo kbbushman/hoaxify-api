@@ -101,9 +101,12 @@ const update = async (req, res, next) => {
   try {
     const user = await User.findOne({ where: { id: req.params.id } });
     user.username = req.body.username;
-    req.body.image
-      ? (user.image = await fileService.saveProfileImage(req.body.image))
-      : null;
+    if (user.image && req.body.image) {
+      await fileService.deleteProfileImage(user.image);
+      user.image = await fileService.saveProfileImage(req.body.image);
+    } else if (req.body.image && !user.image) {
+      user.image = await fileService.saveProfileImage(req.body.image);
+    }
     await user.save();
     return res.send({
       id: user.id,
