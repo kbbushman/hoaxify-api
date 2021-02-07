@@ -19,5 +19,6 @@
   "unauthorized_user_delete": "Your are not authorized to delete user",
   "email_not_in_use": "Email not found",
   "password_reset_request_success": "Check your email for your password reset link",
-  "unauthorized_password_reset": "You are not authorized to update the password for this account. Please try following the password reset steps again."
+  "unauthorized_password_reset": "You are not authorized to update the password for this account. Please try following the password reset steps again.",
+  "profile_image_size": "Your profile image cannot be larger than 2MB"
 }
