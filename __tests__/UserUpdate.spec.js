@@ -289,4 +289,24 @@ describe('User Update', () => {
       expect(response.body.validationErrors.image).toBe(message);
     }
   );
+
+  it.each`
+    file              | status
+    ${'test-gif.gif'} | ${400}
+    ${'test-pdf.pdf'} | ${400}
+    ${'test-txt.txt'} | ${400}
+    ${'test-png.png'} | ${200}
+    ${'test-jpg.jpg'} | ${200}
+  `(
+    'returns $status when uploading $file as image',
+    async ({ file, status }) => {
+      const fileInBase64 = readFileAsBase64(file);
+      const savedUser = await addUser();
+      const updateBody = { username: 'user1-updated', image: fileInBase64 };
+      const response = await updateUser(savedUser.id, updateBody, {
+        auth: { email: savedUser.email, password: 'P4ssword' },
+      });
+      expect(response.status).toBe(status);
+    }
+  );
 });
