@@ -19,5 +19,6 @@
   "unauthorized_user_delete": "No estás autorizado para eliminar usuario",
   "email_not_in_use": "El correo electrónico no encontrado",
   "password_reset_request_success": "Verifique su correo electrónico para el enlace de restablecimiento de contraseña",
-  "unauthorized_password_reset": "No está autorizado a actualizar la contraseña de esta cuenta. Intente seguir los pasos para restablecer la contraseña nuevamente."
+  "unauthorized_password_reset": "No está autorizado a actualizar la contraseña de esta cuenta. Intente seguir los pasos para restablecer la contraseña nuevamente.",
+  "profile_image_size": "La imagen de tu perfil no puede tener más de 2 MB"
 }
