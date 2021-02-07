@@ -225,13 +225,24 @@ describe('User Update', () => {
   );
 
   it('returns 200 when the image size is exactly 2mb', async () => {
-    const fileWithSizee2MB = 'a'.repeat(1024 * 1024 * 2);
-    const base64 = Buffer.from(fileWithSizee2MB).toString('base64');
+    const fileWithSize2MB = 'a'.repeat(1024 * 1024 * 2);
+    const base64 = Buffer.from(fileWithSize2MB).toString('base64');
     const savedUser = await addUser();
     const validUpdate = { username: 'updated-user', image: base64 };
     const response = await updateUser(savedUser.id, validUpdate, {
       auth: { email: savedUser.email, password: 'P4ssword' },
     });
     expect(response.status).toBe(200);
+  });
+
+  it('returns 400 when image size exceeds 2mb', async () => {
+    const fileWithSizeExceeding2MB = 'a'.repeat(1024 * 1024 * 2) + 'a';
+    const base64 = Buffer.from(fileWithSizeExceeding2MB).toString('base64');
+    const savedUser = await addUser();
+    const invalidUpdate = { username: 'updated-user', image: base64 };
+    const response = await updateUser(savedUser.id, invalidUpdate, {
+      auth: { email: savedUser.email, password: 'P4ssword' },
+    });
+    expect(response.status).toBe(400);
   });
 });
