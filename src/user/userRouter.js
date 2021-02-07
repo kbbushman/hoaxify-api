@@ -87,7 +87,27 @@ router.get('/', pagination, userController.getUsers);
 
 router.get('/:id', userController.getUser);
 
-router.put('/:id', userController.update);
+router.put(
+  '/:id',
+  check('username')
+    .notEmpty()
+    .withMessage('username_null')
+    .bail()
+    .isLength({ min: 4, max: 32 })
+    .withMessage('username_length'),
+  (req, res, next) => {
+    const authenticatedUser = req.authenticatedUser;
+    if (
+      !authenticatedUser ||
+      authenticatedUser.id.toString() !== req.params.id
+    ) {
+      return next(new ForbiddenException('unauthorized_user_update'));
+    }
+    next();
+  },
+  validateRequest,
+  userController.update
+);
 
 router.delete('/:id', userController.deleteUser);
 
