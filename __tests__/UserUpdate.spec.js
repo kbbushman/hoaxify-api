@@ -223,4 +223,15 @@ describe('User Update', () => {
       expect(response.body.validationErrors.username).toBe(message);
     }
   );
+
+  it('returns 200 when the image size is exactly 2mb', async () => {
+    const fileWithSizee2MB = 'a'.repeat(1024 * 1024 * 2);
+    const base64 = Buffer.from(fileWithSizee2MB).toString('base64');
+    const savedUser = await addUser();
+    const validUpdate = { username: 'updated-user', image: base64 };
+    const response = await updateUser(savedUser.id, validUpdate, {
+      auth: { email: savedUser.email, password: 'P4ssword' },
+    });
+    expect(response.status).toBe(200);
+  });
 });
