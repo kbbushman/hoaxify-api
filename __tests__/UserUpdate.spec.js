@@ -270,4 +270,23 @@ describe('User Update', () => {
     const userInDb = await User.findOne({ where: { id: savedUser.id } });
     expect(userInDb.image).toBe(firstImage);
   });
+
+  it.each`
+    language | message
+    ${'es'}  | ${es.profile_image_size}
+    ${'en'}  | ${en.profile_image_size}
+  `(
+    'returns $message when file size exceeds 2mb when language is $language',
+    async ({ language, message }) => {
+      const fileWithExceeding2MB = 'a'.repeat(1024 * 1024 * 2) + 'a';
+      const base64 = Buffer.from(fileWithExceeding2MB).toString('base64');
+      const savedUser = await addUser();
+      const invalidUpdate = { username: 'updated-user', image: base64 };
+      const response = await updateUser(savedUser.id, invalidUpdate, {
+        auth: { email: savedUser.email, password: 'P4ssword' },
+        language,
+      });
+      expect(response.body.validationErrors.image).toBe(message);
+    }
+  );
 });
