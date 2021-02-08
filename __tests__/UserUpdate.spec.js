@@ -225,10 +225,16 @@ describe('User Update', () => {
   );
 
   it('returns 200 when the image size is exactly 2mb', async () => {
-    const fileWithSize2MB = 'a'.repeat(1024 * 1024 * 2);
-    const base64 = Buffer.from(fileWithSize2MB).toString('base64');
+    const testPng = readFileAsBase64();
+    const pngByte = Buffer.from(testPng, 'base64').length;
+    const twoMB = 1024 * 1024 * 2;
+    const filling = 'a'.repeat(twoMB - pngByte);
+    const fillBase64 = Buffer.from(filling).toString('base64');
     const savedUser = await addUser();
-    const validUpdate = { username: 'updated-user', image: base64 };
+    const validUpdate = {
+      username: 'updated-user',
+      image: testPng + fillBase64,
+    };
     const response = await updateUser(savedUser.id, validUpdate, {
       auth: { email: savedUser.email, password: 'P4ssword' },
     });
