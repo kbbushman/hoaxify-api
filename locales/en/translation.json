@@ -20,5 +20,6 @@
   "email_not_in_use": "Email not found",
   "password_reset_request_success": "Check your email for your password reset link",
   "unauthorized_password_reset": "You are not authorized to update the password for this account. Please try following the password reset steps again.",
-  "profile_image_size": "Your profile image cannot be larger than 2MB"
+  "profile_image_size": "Your profile image cannot be larger than 2MB",
+  "unsupported_image_file": "Only JPEG or PNG files are supported"
 }
