@@ -59,8 +59,8 @@ const updateUser = async (id = 5, body = null, options = {}) => {
   return agent.send(body);
 };
 
-const readFileAsBase64 = () => {
-  const filePath = path.join('.', '__tests__', 'resources', 'test-png.png');
+const readFileAsBase64 = (file = 'test-png.png') => {
+  const filePath = path.join('.', '__tests__', 'resources', file);
   return fs.readFileSync(filePath, { encoding: 'base64' });
 };
 
@@ -296,7 +296,6 @@ describe('User Update', () => {
     ${'test-pdf.pdf'} | ${400}
     ${'test-txt.txt'} | ${400}
     ${'test-png.png'} | ${200}
-    ${'test-jpg.jpg'} | ${200}
   `(
     'returns $status when uploading $file as image',
     async ({ file, status }) => {
