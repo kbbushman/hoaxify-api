@@ -1,11 +1,11 @@
 const express = require('express');
-const FileType = require('file-type');
 const { check, validationResult } = require('express-validator');
 const userController = require('./userController');
 const ValidationException = require('../error/ValidationException');
 const ForbiddenException = require('../error/ForbiddenException');
 const pagination = require('../middleware/pagination');
 const { findByPasswordResetToken } = require('./userController');
+const { isLessThan2MB, isSupportedFileType } = require('../file/fileService');
 
 const router = express.Router();
 
@@ -101,13 +101,13 @@ router.put(
       return true;
     }
     const buffer = Buffer.from(imageAsBase64String, 'base64');
-    if (buffer.length > 2 * 1024 * 1024) {
+    if (!isLessThan2MB(buffer)) {
       throw new Error('profile_image_size');
     }
 
-    const type = await FileType.fromBuffer(buffer);
+    const supportedType = await isSupportedFileType(buffer);
 
-    if (!type || (type.mime !== 'image/png' && type.mime !== 'image/jpeg')) {
+    if (!supportedType) {
       throw new Error('unsupported_image_file');
     }
 
